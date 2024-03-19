@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameCritic - Inicio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/estilos/estiloInicio.css}"/>
+</head>
+<body>
+
+<video autoplay muted loop id="background-video" class="position-absolute">
+    <source th:src="@{/imagenes/videoFondo.mp4}" type="video/mp4">
+</video>
+<div id="video-overlay"></div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/imagenes/logo3.jpg}" alt="GameCritic Logo" style="width: 50px;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Juegos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Mis Listas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sobre Mí</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search">
+                <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
+            </form>
+            <div th:if="${usuarioLogueado}">
+                <a href="#" class="boton-usuario"><img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon"
+                                                       style="width: 30px;"></a>
+            </div>
+            <div th:unless="${usuarioLogueado}">
+                <a href="#" class="btn btn-primary boton-inicio-sesion"> <img
+                        th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 20px;" class="mr-1">Iniciar
+                    Sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 text-left texto-legible">
+    <h2 class="titulo">God of War: Ragnarök</h2>
+    <p class="descripcion">God of War Ragnarök es un videojuego de acción y aventuras en tercera persona desarrollado
+        por Santa Monica Studio y publicado por Sony Interactive Entertainment en 2022.</p>
+    <a href="#" class="btn btn-primary">Ver Ficha</a>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-left">Más populares</h2>
+    <div class="row justify-content-center">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6 mt-3" th:each="juego : ${mejoresJuegos}">
+            <div class="card mb-4">
+                <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" class="card-img-top" alt="Juego"
+                     th:alt="${juego.titulo}" th:attr="data-src=@{/portadaJuegos/{foto}(foto=${juego.foto})}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${juego.titulo}">Título del Juego</h5>
+                    <p class="card-text" th:text="'Puntuación media: ' + ${juego.notaMedia}">Puntuación Media</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
