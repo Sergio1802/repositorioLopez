@@ -83,7 +83,7 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego1.add(aventura);
         Set<Plataforma> plataformasJuego1 = new HashSet<>();
         plataformasJuego1.add(playStation);
-        Juego juego1 = new Juego("The Last of Us Part II", "Descripción de The Last of Us Part II", "tlou2.jpg", "2020-06-19", generosJuego1, plataformasJuego1);
+        Juego juego1 = new Juego("The Last of Us Part II", "Descripción de The Last of Us Part II", "tlou2.jpg", "19-06-2020", generosJuego1, plataformasJuego1);
         if (juegoRepository.findByTitulo(juego1.getTitulo()) == null) {
             juegoRepository.save(juego1);
         }
@@ -93,7 +93,7 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego2.add(rol);
         Set<Plataforma> plataformasJuego2 = new HashSet<>();
         plataformasJuego2.add(pc);
-        Juego juego2 = new Juego("The Witcher 3: Wild Hunt", "Descripción de The Witcher 3: Wild Hunt", "tw3.jpg", "2015-05-19", generosJuego2, plataformasJuego2);
+        Juego juego2 = new Juego("The Witcher 3: Wild Hunt", "Descripción de The Witcher 3: Wild Hunt", "tw3.jpg", "19-05-2015", generosJuego2, plataformasJuego2);
         if (juegoRepository.findByTitulo(juego2.getTitulo()) == null) {
             juegoRepository.save(juego2);
         }
@@ -107,7 +107,7 @@ public class CrearDatos implements CommandLineRunner {
         plataformasJuego3.add(xbox);
         plataformasJuego3.add(playStation);
         plataformasJuego3.add(pc);
-        Juego juego3 = new Juego("Red Dead Redemption 2", "Descripción de Red Dead Redemption 2", "rd2.jpg", "2018-10-26", generosJuego3, plataformasJuego3);
+        Juego juego3 = new Juego("Red Dead Redemption 2", "Descripción de Red Dead Redemption 2", "rd2.jpg", "26-10-2018", generosJuego3, plataformasJuego3);
         if (juegoRepository.findByTitulo(juego3.getTitulo()) == null) {
             juegoRepository.save(juego3);
         }
@@ -118,7 +118,7 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego4.add(estrategia);
         Set<Plataforma> plataformasJuego4 = new HashSet<>();
         plataformasJuego4.add(nintendo);
-        Juego juego4 = new Juego("The Legend of Zelda: Breath of the Wild", "Descripción de The Legend of Zelda: Breath of the Wild", "zelda.jpg", "2017-03-03", generosJuego4, plataformasJuego4);
+        Juego juego4 = new Juego("The Legend of Zelda: Breath of the Wild", "Descripción de The Legend of Zelda: Breath of the Wild", "zelda.jpg", "03-03-2017", generosJuego4, plataformasJuego4);
         if (juegoRepository.findByTitulo(juego4.getTitulo()) == null) {
             juegoRepository.save(juego4);
         }
@@ -131,7 +131,7 @@ public class CrearDatos implements CommandLineRunner {
         plataformasJuego5.add(playStation);
         plataformasJuego5.add(xbox);
         plataformasJuego5.add(pc);
-        Juego juego5 = new Juego("Dark Souls III", "Descripción de Dark Souls III", "ds3.jpg", "2016-04-12", generosJuego5, plataformasJuego5);
+        Juego juego5 = new Juego("Dark Souls III", "Descripción de Dark Souls III", "ds3.jpg", "12-04-2016", generosJuego5, plataformasJuego5);
         if (juegoRepository.findByTitulo(juego5.getTitulo()) == null) {
             juegoRepository.save(juego5);
         }
@@ -143,7 +143,7 @@ public class CrearDatos implements CommandLineRunner {
         plataformasJuego6.add(playStation);
         plataformasJuego6.add(xbox);
         plataformasJuego6.add(pc);
-        Juego juego6 = new Juego("FC 24", "Descripción de FC 24", "f24.jpg", "2023-10-01", generosJuego6, plataformasJuego6);
+        Juego juego6 = new Juego("FC 24", "Descripción de FC 24", "f24.jpg", "01-10-2023", generosJuego6, plataformasJuego6);
         if (juegoRepository.findByTitulo(juego6.getTitulo()) == null) {
             juegoRepository.save(juego6);
         }
@@ -153,7 +153,7 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego7.add(aventura);
         Set<Plataforma> plataformasJuego7 = new HashSet<>();
         plataformasJuego7.add(nintendo);
-        Juego juego7 = new Juego("Super Mario Odyssey", "Descripción de Super Mario Odyssey", "smo.jpg", "2017-10-27", generosJuego7, plataformasJuego7);
+        Juego juego7 = new Juego("Super Mario Odyssey", "Descripción de Super Mario Odyssey", "smo.jpg", "27-10-2017", generosJuego7, plataformasJuego7);
         if (juegoRepository.findByTitulo(juego7.getTitulo()) == null) {
             juegoRepository.save(juego7);
         }
@@ -166,7 +166,7 @@ public class CrearDatos implements CommandLineRunner {
         plataformasJuego8.add(xbox);
         plataformasJuego8.add(playStation);
         plataformasJuego8.add(pc);
-        Juego juego8 = new Juego("Assassin's Creed Valhalla", "Descripción de Assassin's Creed Valhalla", "acv.jpg", "2020-11-10", generosJuego8, plataformasJuego8);
+        Juego juego8 = new Juego("Assassin's Creed Valhalla", "Descripción de Assassin's Creed Valhalla", "acv.jpg", "10-11-2020", generosJuego8, plataformasJuego8);
         if (juegoRepository.findByTitulo(juego8.getTitulo()) == null) {
             juegoRepository.save(juego8);
         }
@@ -176,7 +176,7 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego9.add(carreras);
         Set<Plataforma> plataformasJuego9 = new HashSet<>();
         plataformasJuego9.add(playStation);
-        Juego juego9 = new Juego("Gran Turismo 7", "Descripción de Gran Turismo 7", "gt7.jpg", "2022-03-04", generosJuego9, plataformasJuego9);
+        Juego juego9 = new Juego("Gran Turismo 7", "Descripción de Gran Turismo 7", "gt7.jpg", "04-03-2022", generosJuego9, plataformasJuego9);
         if (juegoRepository.findByTitulo(juego9.getTitulo()) == null) {
             juegoRepository.save(juego9);
         }
@@ -190,40 +190,40 @@ public class CrearDatos implements CommandLineRunner {
         plataformasJuego10.add(playStation);
         plataformasJuego10.add(xbox);
         plataformasJuego10.add(pc);
-        Juego juego10 = new Juego("Cyberpunk 2077", "Descripción de Cyberpunk 2077", "cyber.jpg", "2020-12-10", generosJuego10, plataformasJuego10);
+        Juego juego10 = new Juego("Cyberpunk 2077", "Descripción de Cyberpunk 2077", "cyber.jpg", "10-12-2020", generosJuego10, plataformasJuego10);
         if (juegoRepository.findByTitulo(juego10.getTitulo()) == null) {
             juegoRepository.save(juego10);
         }
 
 
-        Usuario usuario1 = new Usuario("usuario1", "Usuario Uno", "usuario1@example.com",
-                passwordEncoder.encode("1234"), "1990-01-01",
+        Usuario usuario1 = new Usuario("usuario1", "usuario1@example.com",
+                passwordEncoder.encode("1234"), "01-01-1990",
                 "perfil1.jpg", "USER");
-
 
         if (usuarioRepository.findByNombreUsuario(usuario1.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario1);
         }
 
-        Usuario usuario2 = new Usuario("usuario2", "Usuario Dos", "usuario2@example.com",
-                passwordEncoder.encode("1234"), "1995-02-02",
+        Usuario usuario2 = new Usuario("usuario2", "usuario2@example.com",
+                passwordEncoder.encode("1234"), "02-02-1995",
                 "perfil2.jpg", "USER");
 
         if (usuarioRepository.findByNombreUsuario(usuario2.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario2);
         }
 
-        Usuario usuario3 = new Usuario("usuario3", "Usuario Tres", "usuario3@example.com",
-                passwordEncoder.encode("admin"), "1985-03-03",
+        Usuario usuario3 = new Usuario("usuario3", "usuario3@example.com",
+                passwordEncoder.encode("admin"), "03-03-1985",
                 "perfil3.jpg", "ADMIN");
 
         if (usuarioRepository.findByNombreUsuario(usuario3.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario3);
         }
 
-        Usuario usuario4 = new Usuario("usuario4", "Usuario Cuatro", "usuario4@example.com",
-                passwordEncoder.encode("admin"), "1988-04-04",
+        Usuario usuario4 = new Usuario("usuario4", "usuario4@example.com",
+                passwordEncoder.encode("admin"), "04-04-1988",
                 "perfil4.jpg", "USER");
+
 
         if (usuarioRepository.findByNombreUsuario(usuario4.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario4);

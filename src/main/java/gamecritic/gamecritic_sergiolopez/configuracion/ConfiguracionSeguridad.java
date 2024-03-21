@@ -17,25 +17,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class ConfiguracionSeguridad {
 
-    @Autowired
-    UserDetailsService detallesUsuario;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(detallesUsuario);
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.authorizeHttpRequests(authorize -> {
+        return httpSecurity.authorizeRequests(authorize -> {
             authorize.requestMatchers("/").permitAll();
-            authorize.requestMatchers("/static/**").permitAll();
-            authorize.anyRequest().permitAll();
-        }).formLogin(form -> form.loginPage("/login")).build();
-
+            authorize.requestMatchers("/irRegistro").permitAll();
+            authorize.requestMatchers("/registro").permitAll();
+            authorize.requestMatchers("/login").permitAll();
+            authorize.requestMatchers("/imagenes/**").permitAll();
+            authorize.requestMatchers("/estilos/**").permitAll();
+            authorize.requestMatchers("/portadaJuegos/**").permitAll();
+            authorize.anyRequest().authenticated();
+        }).build();
     }
 }

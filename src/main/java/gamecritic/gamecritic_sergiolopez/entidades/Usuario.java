@@ -31,10 +31,6 @@ public class Usuario {
     private String nombreUsuario;
 
     @NotEmpty
-    @Size(max = 40)
-    private String nombreCompleto;
-
-    @NotEmpty
     @Email
     private String email;
 
@@ -49,9 +45,8 @@ public class Usuario {
     @NotEmpty
     private String rol;
 
-    public Usuario(String nombreUsuario, String nombreCompleto, String email, String password, String fechaNacimiento, String fotoPerfil, String rol) {
+    public Usuario(String nombreUsuario, String email, String password, String fechaNacimiento, String fotoPerfil, String rol) {
         this.nombreUsuario = nombreUsuario;
-        this.nombreCompleto = nombreCompleto;
         this.email = email;
         this.password = password;
         this.fechaNacimiento = fechaNacimiento;
