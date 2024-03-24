@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,11 +26,13 @@ public class Juego {
     private Integer id;
 
     private String titulo;
+
+    @Column(length = 4000)
     private String descripcion;
     private String foto;
 
     @Column(name = "fecha_lanzamiento")
-    private String fechaLanzamiento;
+    private Date fechaLanzamiento;
 
     @ManyToMany
     @JoinTable(
@@ -47,7 +50,7 @@ public class Juego {
 
     private Double notaMedia;
 
-    public Juego(String titulo, String descripcion, String foto, String fechaLanzamiento, Set<Genero> generos, Set<Plataforma> plataformas) {
+    public Juego(String titulo, String descripcion, String foto, Date fechaLanzamiento, Set<Genero> generos, Set<Plataforma> plataformas) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.foto = foto;

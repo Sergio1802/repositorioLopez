@@ -29,10 +29,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link">Inicio</a>
+                    <a class="nav-link" href="#">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Juegos</a>
+                    <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Mis Listas</a>
@@ -116,7 +116,9 @@
 </div>
 <div th:if="${mensajeRegistro != null}" class="mensaje">
     <span th:text="${mensajeRegistro}"></span>
-    <span class="cerrar-mensaje" onclick="cerrarMensaje2()">X</span>
+    <div class="cerrar-mensaje" onclick="cerrarMensaje2()">
+        <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
+    </div>
 </div>
 <div th:if="${mensajeError != null}" class="mensaje-error">
     <div class="icono-error">

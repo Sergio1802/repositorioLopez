@@ -27,6 +27,8 @@ public class ConfiguracionSeguridad {
         return httpSecurity.authorizeRequests(authorize -> {
             authorize.requestMatchers("/").permitAll();
             authorize.requestMatchers("/irRegistro").permitAll();
+            authorize.requestMatchers("/juegos/irlistaJuegos").permitAll();
+            authorize.requestMatchers("/juegos/filtrar-juegos").permitAll();
             authorize.requestMatchers("/registro").permitAll();
             authorize.requestMatchers("/login").permitAll();
             authorize.requestMatchers("/imagenes/**").permitAll();

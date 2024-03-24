@@ -1,0 +1,134 @@
+.imagenFondo {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    z-index: -2;
+    background-repeat: repeat;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-size: 18px;
+}
+
+.navbar-brand img {
+    border-radius: 50%;
+}
+
+.navbar-nav .nav-item .nav-link:hover,
+.navbar-brand:hover {
+    color: #ffffff;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.boton-inicio-sesion {
+    color: white;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.boton-inicio-sesion:hover {
+    color: white;
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.boton-buscar {
+    color: white;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.boton-buscar:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.navbar-toggler {
+    background-color: white;
+    border-radius: 20%;
+}
+
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.card-img-top {
+    height: 200px;
+}
+
+.card-body {
+    padding: 3px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bg-white {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+
+.plataformas {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plataforma {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+.eleccion-checkbox label {
+    display: block;
+}
+
+.eleccion-checkbox label:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+select option:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+hr {
+    border: none;
+    height: 1px;
+    background-color: #000000;
+    margin: 20px 0;
+}

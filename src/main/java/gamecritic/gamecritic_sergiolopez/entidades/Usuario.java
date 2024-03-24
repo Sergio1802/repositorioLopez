@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 @Scope("prototype")
 @Entity
@@ -38,14 +40,14 @@ public class Usuario {
     private String password;
 
     @Column(name = "fecha_nacimiento")
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
 
     private String fotoPerfil;
 
     @NotEmpty
     private String rol;
 
-    public Usuario(String nombreUsuario, String email, String password, String fechaNacimiento, String fotoPerfil, String rol) {
+    public Usuario(String nombreUsuario, String email, String password, Date fechaNacimiento, String fotoPerfil, String rol) {
         this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.password = password;

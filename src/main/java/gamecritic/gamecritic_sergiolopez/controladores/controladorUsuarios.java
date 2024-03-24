@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Controller
@@ -78,11 +79,13 @@ public class controladorUsuarios {
             return "registro";
         }
 
-        LocalDate fechaNacimientoDate = LocalDate.parse(fechaNacimiento);
+        LocalDate fechaNacimientoLocalDate = LocalDate.parse(fechaNacimiento);
+        Date fechaNacimientoDate = Date.from(fechaNacimientoLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         LocalDate fechaHoy = LocalDate.now();
         LocalDate fechaHace14Anios = fechaHoy.minusYears(14);
 
-        if (fechaNacimientoDate.isAfter(fechaHace14Anios)) {
+        if (fechaNacimientoLocalDate.isAfter(fechaHace14Anios)) {
             model.addAttribute("mensajeError", "Debes ser mayor de 14 años para registrarte");
             return "registro";
         }
@@ -91,7 +94,7 @@ public class controladorUsuarios {
 
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
-        nuevoUsuario.setFechaNacimiento(fechaNacimiento);
+        nuevoUsuario.setFechaNacimiento(fechaNacimientoDate);
         nuevoUsuario.setEmail(correoElectronico);
         nuevoUsuario.setPassword(contraseñaEncriptada);
         nuevoUsuario.setRol("USER");
