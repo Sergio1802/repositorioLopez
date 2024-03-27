@@ -53,6 +53,9 @@ public class controladorUsuarios {
         List<Juego> mejoresJuegos = juegoServicio.obtenerMejoresJuegos(6);
         modelo.addAttribute("mejoresJuegos", mejoresJuegos);
         return "index";
+    }@GetMapping("/irSobreMi")
+    public String irPaginaSobreMi(Model modelo) {
+        return "sobreMi";
     }
 
     @GetMapping("/irRegistro")

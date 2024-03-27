@@ -26,9 +26,11 @@ public class ConfiguracionSeguridad {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeRequests(authorize -> {
             authorize.requestMatchers("/").permitAll();
+            authorize.requestMatchers("/irSobreMi").permitAll();
             authorize.requestMatchers("/irRegistro").permitAll();
             authorize.requestMatchers("/juegos/irlistaJuegos").permitAll();
-            authorize.requestMatchers("/juegos/filtrar-juegos").permitAll();
+            authorize.requestMatchers("/juegos/filtrar").permitAll();
+            authorize.requestMatchers("/juegos/irFichaJuego").permitAll();
             authorize.requestMatchers("/registro").permitAll();
             authorize.requestMatchers("/login").permitAll();
             authorize.requestMatchers("/imagenes/**").permitAll();

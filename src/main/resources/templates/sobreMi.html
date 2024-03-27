@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - GameCritic</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" th:href="@{/estilos/estiloInicio.css}"/>
+    <title>Midu.dev</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/estilos/estiloSobreMi.css}"/>
     <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
-
 </head>
-<body>
+
+<body class="bg-light">
 <img class="imagenFondo" th:src="@{/imagenes/fondoImagen.jpg}">
-<video autoplay muted loop id="background-video" class="position-absolute">
-    <source th:src="@{/imagenes/videoFondo.mp4}" type="video/mp4">
-</video>
-<div id="video-overlay"></div>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
         <a class="navbar-brand">
@@ -29,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+                    <a class="nav-link" th:href="@{/}">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
@@ -38,7 +35,7 @@
                     <a class="nav-link" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
+                    <a class="nav-link" href="#">Sobre Mí</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -62,28 +59,49 @@
         </div>
     </div>
 </nav>
-
-<div class="container mt-5 text-left texto-legible">
-    <h2 class="titulo">God of War: Ragnarök</h2>
-    <p class="descripcion">God of War Ragnarök es un videojuego de acción y aventuras en tercera persona desarrollado
-        por Santa Monica Studio y publicado por Sony Interactive Entertainment en 2022.</p>
-    <a href="#" class="btn btn-primary">Ver Ficha</a>
-</div>
-
-<div class="container mt-5">
-    <h2 class="text-left">Más populares</h2>
-    <div class="row justify-content-center">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6 mt-3" th:each="juego : ${mejoresJuegos}">
-            <div class="card mb-4">
-                <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" class="card-img-top" alt="Juego"
-                     th:alt="${juego.titulo}" th:attr="data-src=@{/portadaJuegos/{foto}(foto=${juego.foto})}">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${juego.titulo}">Título del Juego</h5>
-                    <p class="card-text" th:text="'Puntuación media: ' + ${juego.notaMedia}">Puntuación Media</p>
-                </div>
+<!-- End Header -->
+<div class="container bg-white">
+    <main class="mt-5 pt-5">
+        <!-- Sección de experiencia -->
+        <section id="experiencia" class="section bg-light">
+            <div class="container">
+                <h2>Experiencia</h2>
+                <!-- Insertar aquí el contenido de la sección de experiencia -->
             </div>
+        </section>
+
+        <!-- Sección de proyectos -->
+        <section id="proyectos" class="section bg-light">
+            <div class="container">
+                <h2>Proyectos</h2>
+                <!-- Insertar aquí el contenido de la sección de proyectos -->
+            </div>
+        </section>
+
+        <!-- Sección sobre mí -->
+        <section id="sobre-mi" class="section bg-light">
+            <div class="container">
+                <h2>Sobre mí</h2>
+                <!-- Insertar aquí el contenido de la sección sobre mí -->
+            </div>
+        </section>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="bg-light">
+        <div class="container">
+            <span class="text-sm text-muted">© 2024 <a href="https://midu.dev/" class="text-muted">Midudev</a>. Casi todos los derechos reservados</span>
+            <ul class="nav justify-content-end mt-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="#sobre-mi">Sobre mí</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="mailto:miduga@gmail.com">Contacto</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </footer>
 </div>
 <div class="modal fade" id="modalInicioSesion" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -114,12 +132,6 @@
         </div>
     </div>
 </div>
-<div th:if="${mensajeRegistro != null}" class="mensaje">
-    <span th:text="${mensajeRegistro}"></span>
-    <div class="cerrar-mensaje" onclick="cerrarMensaje2()">
-        <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
-    </div>
-</div>
 <div th:if="${mensajeError != null}" class="mensaje-error">
     <div class="icono-error">
         <img th:src="@{/imagenes/iconoError.png}" alt="Icono de Error">
@@ -131,9 +143,10 @@
         <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('#boton-iniciar-sesion').click(function (e) {
@@ -148,14 +161,7 @@
             mensajeElement.style.display = 'none';
         }
     }
-
-    function cerrarMensaje2() {
-        var mensajeElement = document.querySelector('.mensaje');
-        if (mensajeElement) {
-            mensajeElement.style.display = 'none';
-        }
-    }
 </script>
-
 </body>
+
 </html>

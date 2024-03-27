@@ -1,6 +1,7 @@
 package gamecritic.gamecritic_sergiolopez.controladores;
 
 import gamecritic.gamecritic_sergiolopez.entidades.Juego;
+import gamecritic.gamecritic_sergiolopez.entidades.Plataforma;
 import gamecritic.gamecritic_sergiolopez.repositorios.JuegoRepository;
 import gamecritic.gamecritic_sergiolopez.servicios.JuegoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,15 +30,23 @@ public class ControladorJuegos {
         return "listaJuegos";
     }
 
-    @PostMapping("/filtrar-juegos")
-    public ResponseEntity<List<Juego>> filtrarJuegos(@RequestBody Map<String, Object> filtros) {
-        String fechaDesde = (String) filtros.get("fechaDesde");
-        String fechaHasta = (String) filtros.get("fechaHasta");
-        List<String> plataformas = (List<String>) filtros.get("plataformas");
-        List<String> generos = (List<String>) filtros.get("generos");
+    @GetMapping("/irFichaJuego")
+    public String irPaginaJuego(Model modelo) {
+        return "fichaJuego";
+    }
 
-        // Luego puedes pasar estos filtros al servicio para obtener los juegos filtrados
-        List<Juego> juegosFiltrados = juegoServicio.filtrarJuegos(fechaDesde,fechaHasta,plataformas,generos);
-        return new ResponseEntity<>(juegosFiltrados, HttpStatus.OK);
+    @GetMapping("/filtrar")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> filtrarJuegos(@RequestParam(value = "fechaDesde") String fechaDesde,
+                                                             @RequestParam(value = "fechaHasta") String fechaHasta,
+                                                             @RequestParam(value = "plataformas") List<String> plataformas,
+                                                             @RequestParam(value = "generos") List<String> generos) {
+        List<Juego> juegosFiltrados = juegoServicio.filtrarJuegos(fechaDesde, fechaHasta, plataformas, generos);
+        Map<String, Object> response = new HashMap<>();
+        response.put("resultados", juegosFiltrados);
+        return ResponseEntity.ok().body(response);
+
     }
 }
+
+

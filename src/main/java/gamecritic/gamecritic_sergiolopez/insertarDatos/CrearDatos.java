@@ -108,6 +108,8 @@ public class CrearDatos implements CommandLineRunner {
         generosJuego2.add(rol);
         Set<Plataforma> plataformasJuego2 = new HashSet<>();
         plataformasJuego2.add(pc);
+        plataformasJuego2.add(xbox);
+        plataformasJuego2.add(playStation);
         Juego juego2 = new Juego("The Witcher 3: Wild Hunt", "The Witcher 3: Wild Hunt es un juego de rol de acción con una perspectiva en tercera persona. Los jugadores controlan a Geralt de Rivia, un cazador de monstruos.", "tw3.jpg", fechaLanzamiento2, generosJuego2, plataformasJuego2);
         if (juegoRepository.findByTitulo(juego2.getTitulo()) == null) {
             juegoRepository.save(juego2);

@@ -76,7 +76,7 @@
 }
 
 .card-body {
-    padding: 3px;
+    padding: 10px;
     height: 200px;
     overflow: hidden;
 }
@@ -114,6 +114,7 @@
     border-radius: 5px;
     font-size: 0.8rem;
 }
+
 .eleccion-checkbox label {
     display: block;
 }
@@ -122,13 +123,19 @@
     background-color: #f0f0f0;
     cursor: pointer;
 }
+
 select option:hover {
     background-color: lightgray;
     cursor: pointer;
 }
+
 hr {
     border: none;
     height: 1px;
     background-color: #000000;
     margin: 20px 0;
+}
+
+.card-text.fecha {
+    font-size: 0.8rem;
 }

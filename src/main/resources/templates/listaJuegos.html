@@ -33,7 +33,7 @@
                     <a class="nav-link" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sobre Mí</a>
+                    <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -94,16 +94,16 @@
                     <label>Plataformas:</label>
                     <div class="eleccion-checkbox">
                         <label>
-                            <input type="checkbox" value="PC"> PC
+                            <input type="checkbox" name="plataformas" value="PC"> PC
                         </label>
                         <label>
-                            <input type="checkbox" value="PlayStation"> PlayStation
+                            <input type="checkbox" name="plataformas" value="PlayStation"> PlayStation
                         </label>
                         <label>
-                            <input type="checkbox" value="Xbox"> Xbox
+                            <input type="checkbox" name="plataformas" value="Xbox"> Xbox
                         </label>
                         <label>
-                            <input type="checkbox" value="Nintendo"> Nintendo
+                            <input type="checkbox" name="plataformas" value="Nintendo"> Nintendo
                         </label>
                     </div>
                 </div>
@@ -113,29 +113,30 @@
                     <label>Géneros:</label>
                     <div class="eleccion-checkbox">
                         <label>
-                            <input type="checkbox" value="Acción"> Acción
+                            <input type="checkbox" name="generos" value="Acción"> Acción
                         </label>
                         <label>
-                            <input type="checkbox" value="Aventura"> Aventura
+                            <input type="checkbox" name="generos" value="Aventura"> Aventura
                         </label>
                         <label>
-                            <input type="checkbox" value="Estrategia"> Estrategia
+                            <input type="checkbox" name="generos" value="Estrategia"> Estrategia
                         </label>
                         <label>
-                            <input type="checkbox" value="Carreras"> Carreras
+                            <input type="checkbox" name="generos" value="Carreras"> Carreras
                         </label>
                         <label>
-                            <input type="checkbox" value="Deporte"> Deporte
+                            <input type="checkbox" name="generos" value="Deporte"> Deporte
                         </label>
                         <label>
-                            <input type="checkbox" value="Rol"> Rol
+                            <input type="checkbox" name="generos" value="Rol"> Rol
                         </label>
                     </div>
+
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <button  type="button" class="btn btn-secondary">Limpiar Filtro</button>
-                    <button id="aplicarFiltroBtn"type="button" class="btn btn-primary">Aplicar Filtro</button>
+                    <button id="limpiarFiltroBtn" type="button" class="btn btn-secondary">Limpiar Filtro</button>
+                    <button id="aplicarFiltroBtn" type="button" class="btn btn-primary">Aplicar Filtro</button>
                 </div>
 
             </form>
@@ -147,15 +148,17 @@
                 <h1>Lista de Juegos</h1>
                 <div class="form-group">
                     <label for="ordenarPor" class="mr-2">Ordenar por:</label>
-                    <select class="form-control" id="ordenarPor" onchange="ordenarJuegos()">
-                        <option value="titulo">Título</option>
-                        <option value="notaMedia">Nota Media</option>
+                    <select class="form-control" id="ordenarPor">
+                        <option value="notaMedia" selected>Nota Media</option>
+                        <option value="fechaNuevos">Lanzamientos Recientes</option>
+                        <option value="fechaViejos">Lanzamientos Antiguos</option>
                     </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="juegosContainer">
                 <div class="col-lg-4 mb-4" th:each="juego : ${listaJuegos}">
-                    <div class="card">
+
+                    <div class="card"  onclick="irAFichaJuego(${juego.id})">
                         <div class="row no-gutters">
                             <div class="col-md-6">
                                 <img class="card-img-top" th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}"
@@ -164,10 +167,11 @@
                             <div class="col-md-6">
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${juego.titulo}">Título del Juego</h5>
-                                    <p class="card-text"
+                                    <p class="card-text fecha"
                                        th:text="${#dates.format(juego.fechaLanzamiento, 'dd MMMM yyyy')}">
                                         Fecha de Lanzamiento</p>
-                                    <p class="card-text" th:text="'Nota media: ' + ${juego.notaMedia}">Nota Media</p>
+                                    <p class="card-text" th:text="'Nota media: ' + ${juego.notaMedia}">Nota
+                                        Media</p>
                                     <ul class="plataformas">
                                         <li class="plataforma" th:each="plataforma : ${juego.plataformas}"
                                             th:text="${plataforma.nombre}"></li>
@@ -176,6 +180,12 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul id="pagination" class="pagination justify-content-center"></ul>
                 </div>
             </div>
         </div>
@@ -225,7 +235,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
+<script th:inline="javascript">
+
     $(document).ready(function () {
         $('#boton-iniciar-sesion').click(function (e) {
             e.preventDefault();
@@ -240,83 +251,162 @@
         }
     }
 
+    function formatearFecha(fecha) {
+        const opciones = {day: 'numeric', month: 'long', year: 'numeric'};
+        const fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', opciones);
+        const partes = fechaFormateada.split(' de ');
+        if (partes.length === 3) {
+            return partes[0] + ' ' + partes[1] + ' ' + partes[2];
+        }
+        return fechaFormateada;
+    }
+
+    function cargarPlataformas(plataformas) {
+        var listaPlataformas = '';
+        plataformas.forEach(function (plataforma) {
+            listaPlataformas += '<li class="plataforma">' + plataforma.nombre + '</li>';
+        });
+        return listaPlataformas;
+    }
+
     $(document).ready(function () {
-        $('#aplicarFiltroBtn').click(function (e) {
-            e.preventDefault();
-            aplicarFiltro();
+        var listaJuegos = /*[[${listaJuegos}]]*/ [];
+        var juegos = listaJuegos || [];
+        var juegosFiltrados =  /*[[${listaJuegos}]]*/ [];
+        var pagActual = 1;
+        var juegosPorPag = 12;
+        var ordenActual = "";
+
+        function mostrarJuegos(pagina, juegos) {
+            $('#juegosContainer').empty();
+            var indiceInicio = (pagina - 1) * juegosPorPag;
+            var indiceFinal = Math.min(indiceInicio + juegosPorPag, juegos.length);
+            for (var i = indiceInicio; i < indiceFinal; i++) {
+                var juego = juegos[i];
+                var juegoHtml = '<div class="col-lg-4 mb-4">' +
+                    '<div class="card" onclick="irAFichaJuego(' + juego.id + ')">' +
+                    '<div class="row no-gutters">' +
+                    '<div class="col-md-6">' +
+                    '<img class="card-img-top" src="/portadaJuegos/' + juego.foto + '" alt="Portada del Juego">' +
+                    '</div>' +
+                    '<div class="col-md-6">' +
+                    '<div class="card-body">' +
+                    '<h5 class="card-title">' + juego.titulo + '</h5>' +
+                    '<p class="card-text fecha">' + formatearFecha(juego.fechaLanzamiento) + '</p>' +
+                    '<p class="card-text">Nota media: ' + juego.notaMedia + '</p>' +
+                    '<ul class="plataformas">' +
+                    cargarPlataformas(juego.plataformas) +
+                    '</ul>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                $('#juegosContainer').append(juegoHtml);
+            }
+
+        }
+
+        function generarPaginacion(juegos) {
+            var totalPag = Math.ceil(juegos.length / juegosPorPag);
+            $('#pagination').empty();
+            for (var i = 1; i <= totalPag; i++) {
+                var liClass = (i === pagActual) ? 'page-item active' : 'page-item';
+                var aClass = 'page-link';
+                var pagLink = '<li class="' + liClass + '"><a class="' + aClass + '" href="#" data-page="' + i + '">' + i + '</a></li>';
+                $('#pagination').append(pagLink);
+            }
+        }
+
+        function mostrarJuegosOrdenados(orden) {
+            var juegosMostrados = juegosFiltrados;
+
+            ordenActual = orden;
+            switch (orden) {
+                case 'notaMedia':
+                    juegosMostrados.sort((a, b) => b.notaMedia - a.notaMedia);
+                    break;
+                case 'fechaNuevos':
+                    juegosMostrados.sort((a, b) => new Date(b.fechaLanzamiento) - new Date(a.fechaLanzamiento));
+                    break;
+                case 'fechaViejos':
+                    juegosMostrados.sort((a, b) => new Date(a.fechaLanzamiento) - new Date(b.fechaLanzamiento));
+                    break;
+            }
+            mostrarJuegos(pagActual, juegosMostrados);
+            generarPaginacion(juegosMostrados);
+        }
+
+        function cargarMostrarYPaginarJuegos() {
+            mostrarJuegosOrdenados(ordenActual);
+            generarPaginacion(juegos);
+        }
+
+        cargarMostrarYPaginarJuegos();
+
+        $('#ordenarPor').change(function () {
+            var orden = $(this).val();
+            mostrarJuegosOrdenados(orden);
+        });
+
+        $('#pagination').on('click', '.page-link', function (event) {
+            pagActual = parseInt($(this).data('page'));
+            mostrarJuegosOrdenados(ordenActual);
+            event.preventDefault();
+        });
+
+        $('#aplicarFiltroBtn').click(function () {
+            var fechaDesde = $('#fechaDesde').val();
+            var fechaHasta = $('#fechaHasta').val();
+            var plataformas = obtenerPlataformasSeleccionadas();
+            var generos = obtenerGenerosSeleccionados();
+            var url = '/juegos/filtrar?fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta + '&plataformas=' + plataformas.join(',') + '&generos=' + generos.join(',');
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {},
+                success: function (response) {
+                    juegosFiltrados = response.resultados;
+                    pagActual = 1;
+                    mostrarJuegosOrdenados(ordenActual);
+                },
+                error: function () {
+                    alert('Error al filtrar juegos.');
+                }
+            });
+        });
+
+        function obtenerPlataformasSeleccionadas() {
+            var plataformas = [];
+            $('input[name="plataformas"]:checked').each(function () {
+                plataformas.push($(this).val());
+            });
+            return plataformas;
+        }
+
+        function obtenerGenerosSeleccionados() {
+            var generos = [];
+            $('input[name="generos"]:checked').each(function () {
+                generos.push($(this).val());
+            });
+            return generos;
+        }
+
+        $('#limpiarFiltroBtn').click(function () {
+            $('#fechaDesde').val('1972');
+            $('#fechaHasta').val('2024');
+            $('input[name="plataformas"]').prop('checked', false);
+            $('input[name="generos"]').prop('checked', false);
+
+            juegosFiltrados = /*[[${listaJuegos}]]*/ [];
+            pagActual = 1;
+            mostrarJuegosOrdenados(ordenActual);
         });
     });
-
-    function aplicarFiltro() {
-        // Obtener valores de los filtros seleccionados
-        var filtros = {
-            fechaDesde: $('#fechaDesde').val(),
-            fechaHasta: $('#fechaHasta').val(),
-            plataformas: obtenerPlataformasSeleccionadas(),
-            generos: obtenerGenerosSeleccionados()
-        };
-
-        // Enviar solicitud AJAX al servidor
-        $.ajax({
-            type: 'POST',
-            url: '/filtrar-juegos',
-            data: filtros,
-            success: function (response) {
-                // Manejar la respuesta y actualizar la lista de juegos en la página
-                mostrarJuegosFiltrados(response);
-            },
-            error: function (error) {
-                console.error('Error al aplicar filtro:', error);
-            }
-        });
+    function irAFichaJuego(id) {
+        window.location.href = '/juegos/irFichaJuego/' + id;
     }
-
-    function mostrarJuegosFiltrados(juegos) {
-        // Limpiar el contenedor de juegos
-        $('#juegosContainer').empty();
-
-        // Iterar sobre los juegos filtrados y agregarlos al contenedor
-        juegos.forEach(function (juego) {
-            var juegoHtml = '<div class="col-lg-4 mb-4">' +
-                '<div class="card">' +
-                '<div class="row no-gutters">' +
-                '<div class="col-md-6">' +
-                '<img class="card-img-top" th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" alt="Portada del Juego">' +
-                '</div>' +
-                '<div class="col-md-6">' +
-                '<div class="card-body">' +
-                '<h5 class="card-title">' + juego.titulo + '</h5>' +
-                '<p class="card-text">' + juego.fechaLanzamiento + '</p>' +
-                '<p class="card-text">Nota media: ' + juego.notaMedia + '</p>' +
-                '<ul class="plataformas">' +
-                '<li class="plataforma">' + juego.plataformas[0].nombre + '</li>' +
-                // Puedes agregar más detalles según sea necesario
-                '</ul>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-            $('#juegosContainer').append(juegoHtml);
-        });
-    }
-
-    function obtenerPlataformasSeleccionadas() {
-        var plataformas = [];
-        $('input[name="plataformas"]:checked').each(function () {
-            plataformas.push($(this).val());
-        });
-        return plataformas;
-    }
-
-    function obtenerGenerosSeleccionados() {
-        var generos = [];
-        $('input[name="generos"]:checked').each(function () {
-            generos.push($(this).val());
-        });
-        return generos;
-    }
-
 </script>
 
 </body>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JuegoServicio {
@@ -36,7 +37,6 @@ public class JuegoServicio {
         }
         juegos.sort(Comparator.comparing(Juego::getNotaMedia).reversed());
 
-        // Devolver la cantidad especificada de juegos con mejor nota media
         return juegos.subList(0, Math.min(cantidad, juegos.size()));
     }
 
@@ -62,41 +62,61 @@ public class JuegoServicio {
     }
 
     public List<Juego> filtrarJuegos(String fechaDesdeStr, String fechaHastaStr, List<String> plataformas, List<String> generos) {
-        // Convertir fechas a objetos Date si están presentes en los filtros
+        Calendar cal = Calendar.getInstance();
+        int currentYear = cal.get(Calendar.YEAR);
+
         Date fechaDesde = null;
         Date fechaHasta = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
             if (fechaDesdeStr != null && !fechaDesdeStr.isEmpty()) {
-                fechaDesde = dateFormat.parse(fechaDesdeStr);
+                int yearDesde = Integer.parseInt(fechaDesdeStr);
+                if (yearDesde >= 1000 && yearDesde <= 9999) {
+                    cal.set(Calendar.YEAR, yearDesde);
+                    cal.set(Calendar.MONTH, Calendar.JANUARY);
+                    cal.set(Calendar.DAY_OF_MONTH, 1);
+                    fechaDesde = cal.getTime();
+                }
             }
             if (fechaHastaStr != null && !fechaHastaStr.isEmpty()) {
-                fechaHasta = dateFormat.parse(fechaHastaStr);
+                int yearHasta = Integer.parseInt(fechaHastaStr);
+                if (yearHasta >= 1000 && yearHasta <= 9999) {
+                    cal.set(Calendar.YEAR, yearHasta);
+                    cal.set(Calendar.MONTH, Calendar.DECEMBER);
+                    cal.set(Calendar.DAY_OF_MONTH, 31);
+                    fechaHasta = cal.getTime();
+                }
             }
-        } catch (ParseException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 
-        // Lógica para filtrar juegos
         List<Juego> juegosFiltrados = new ArrayList<>();
         List<Juego> juegos = juegoRepository.findAll();
 
         for (Juego juego : juegos) {
-            // Filtrar por fecha de lanzamiento
-            if ((fechaDesde == null || juego.getFechaLanzamiento().after(fechaDesde))
-                    && (fechaHasta == null || juego.getFechaLanzamiento().before(fechaHasta))) {
-                // Filtrar por plataformas
-                if (plataformas.isEmpty() || juego.getPlataformas().stream().anyMatch(plataforma -> plataformas.contains(plataforma.getNombre()))) {
-                    // Filtrar por géneros
-                    if (generos.isEmpty() || juego.getGeneros().stream().anyMatch(genero -> generos.contains(genero.getNombre()))) {
-                        juegosFiltrados.add(juego);
-                    }
-                }
+            boolean cumpleFecha = (fechaDesde == null || juego.getFechaLanzamiento().after(fechaDesde))
+                    && (fechaHasta == null || juego.getFechaLanzamiento().before(fechaHasta));
+
+            boolean contienePlataformas = plataformas.isEmpty() || juego.getPlataformas().stream()
+                    .map(Plataforma::getNombre)
+                    .collect(Collectors.toList())
+                    .containsAll(plataformas);
+
+            boolean contieneGeneros = generos.isEmpty() || juego.getGeneros().stream()
+                    .map(Genero::getNombre)
+                    .collect(Collectors.toList())
+                    .containsAll(generos);
+
+            if (cumpleFecha && contienePlataformas && contieneGeneros) {
+                juegosFiltrados.add(juego);
             }
         }
 
         return juegosFiltrados;
     }
+
+
 
 
 }
