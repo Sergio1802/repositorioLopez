@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Juegos</title>
+    <title>Juegos - GameCritic</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/estilos/estiloListaJuegos.css}"/>
     <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
@@ -41,7 +41,7 @@
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">
-                <a href="#" class="btn btn-primary">
+                <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
                 </a>
@@ -156,32 +156,7 @@
                 </div>
             </div>
             <div class="row" id="juegosContainer">
-                <div class="col-lg-4 mb-4" th:each="juego : ${listaJuegos}">
 
-                    <div class="card"  onclick="irAFichaJuego(${juego.id})">
-                        <div class="row no-gutters">
-                            <div class="col-md-6">
-                                <img class="card-img-top" th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}"
-                                     alt="Portada del Juego">
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${juego.titulo}">Título del Juego</h5>
-                                    <p class="card-text fecha"
-                                       th:text="${#dates.format(juego.fechaLanzamiento, 'dd MMMM yyyy')}">
-                                        Fecha de Lanzamiento</p>
-                                    <p class="card-text" th:text="'Nota media: ' + ${juego.notaMedia}">Nota
-                                        Media</p>
-                                    <ul class="plataformas">
-                                        <li class="plataforma" th:each="plataforma : ${juego.plataformas}"
-                                            th:text="${plataforma.nombre}"></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -192,6 +167,7 @@
 
     </div>
 </div>
+<
 <div class="modal fade" id="modalInicioSesion" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -283,7 +259,7 @@
             var indiceFinal = Math.min(indiceInicio + juegosPorPag, juegos.length);
             for (var i = indiceInicio; i < indiceFinal; i++) {
                 var juego = juegos[i];
-                var juegoHtml = '<div class="col-lg-4 mb-4">' +
+                var juegoHtml = '<div class="col-lg-4 col-md-6 mb-4">' +
                     '<div class="card" onclick="irAFichaJuego(' + juego.id + ')">' +
                     '<div class="row no-gutters">' +
                     '<div class="col-md-6">' +
@@ -404,6 +380,7 @@
             mostrarJuegosOrdenados(ordenActual);
         });
     });
+
     function irAFichaJuego(id) {
         window.location.href = '/juegos/irFichaJuego/' + id;
     }

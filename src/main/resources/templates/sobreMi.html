@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midu.dev</title>
+    <title>Sobre Mí - GameCritic</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/estilos/estiloSobreMi.css}"/>
     <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
@@ -43,7 +43,7 @@
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">
-                <a href="#" class="btn btn-primary">
+                <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
                 </a>
@@ -59,50 +59,69 @@
         </div>
     </div>
 </nav>
-<!-- End Header -->
 <div class="container bg-white">
-    <main class="mt-5 pt-5">
-        <!-- Sección de experiencia -->
-        <section id="experiencia" class="section bg-light">
-            <div class="container">
-                <h2>Experiencia</h2>
-                <!-- Insertar aquí el contenido de la sección de experiencia -->
+    <main class="mt-2 pt-3">
+        <section class="about">
+            <h2>Sergio López - Desarrollador de software</h2>
+            <p> Dominio de Java(Springboot), PHP, JavaScript
+                y bases de datos SQL, xxperiencia en el uso efectivo de git para el control de versiones y la colaboración en proyectos,
+                familiaridad con metodologías ágiles como Scrum.
+                Con el objetivo de seguir aprendiendo y
+                mejorando. Rápida adaptabilidad a nuevas tecnologías y formas
+                de trabajo.
+            </p>
+            <div>
+                <a href="https://www.linkedin.com/in/sergiolopez18/"><img th:src="@{/imagenes/linkedin.png}"
+                                                                          alt="LinkedIn">LinkedIn</a>
+                <a href="mailto:Sergiolopez1802@gmail.com"><img th:src="@{/imagenes/gmail.png}" alt="Correo">Correo</a>
+                <a href="https://github.com/Sergio1802"><img th:src="@{/imagenes/github.png}" alt="GitHub">GitHub</a>
             </div>
         </section>
 
-        <!-- Sección de proyectos -->
-        <section id="proyectos" class="section bg-light">
-            <div class="container">
-                <h2>Proyectos</h2>
-                <!-- Insertar aquí el contenido de la sección de proyectos -->
+        <section class="proyectos">
+            <h2>Proyectos</h2>
+            <div>
+                <img th:src="@{/imagenes/tfgdaw.png}" alt="Proyecto 1">
+                <p>Página web dedicada a explorar y compartir opiniones sobre los videojuegos. Creado desde cero con:
+                    <span>Java(Springboot), JavaScript, Bootstrap y MySQL</span></p>
+            </div>
+            <div>
+                <img th:src="@{/imagenes/tfgdam.png}" alt="Proyecto 2">
+                <p>Aplicación de una tienda de informática. Creado desde cero con: <span>Java y SQLite</span></p>
             </div>
         </section>
 
-        <!-- Sección sobre mí -->
-        <section id="sobre-mi" class="section bg-light">
-            <div class="container">
-                <h2>Sobre mí</h2>
-                <!-- Insertar aquí el contenido de la sección sobre mí -->
+        <section class="estudios">
+            <h2>Estudios</h2>
+            <ul>
+                <li><strong>Grado Superior Desarrollo de Aplicaciones
+                    Multiplataforma</strong> (2021-2023)
+                    <p>Desarrollo de aplicaciones de escritorio y móviles usando java y bases de datos SQL.</p>
+                </li>
+                <li><strong>Grado Superior Desarrollo de Aplicaciones Web</strong> (2023-
+                    2024)
+                    <p>Desarrollo de aplicaciones web usando java(springboot), php, javascript y bases de datos SQL.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="habilidades">
+            <h2>Habilidades</h2>
+            <div>
+                <img th:src="@{/imagenes/java.png}" alt="Java">
+                <img th:src="@{/imagenes/spring.png}" alt="Springboot">
+                <img th:src="@{/imagenes/php.png}" alt="Php">
+                <img th:src="@{/imagenes/javascript.png}" alt="JavaScript">
+                <img th:src="@{/imagenes/html.png}" alt="Html">
+                <img th:src="@{/imagenes/css.png}" alt="Css">
+                <img th:src="@{/imagenes/git.png}" alt="Git">
+                <img th:src="@{/imagenes/sql.png}" alt="Sql">
             </div>
         </section>
     </main>
-
-
-    <!-- Footer -->
-    <footer class="bg-light">
-        <div class="container">
-            <span class="text-sm text-muted">© 2024 <a href="https://midu.dev/" class="text-muted">Midudev</a>. Casi todos los derechos reservados</span>
-            <ul class="nav justify-content-end mt-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="#sobre-mi">Sobre mí</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="mailto:miduga@gmail.com">Contacto</a>
-                </li>
-            </ul>
-        </div>
-    </footer>
 </div>
+<button onclick="subirTop()" id="botonVolverArriba" title="Volver arriba">↑</button>
+
 <div class="modal fade" id="modalInicioSesion" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -161,6 +180,23 @@
             mensajeElement.style.display = 'none';
         }
     }
+
+    function subirTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    window.addEventListener('scroll', function () {
+        var botonVolverArriba = document.getElementById('botonVolverArriba');
+        if (window.scrollY > 600) {
+            botonVolverArriba.style.display = 'block';
+        } else {
+            botonVolverArriba.style.display = 'none';
+        }
+    });
+
 </script>
 </body>
 

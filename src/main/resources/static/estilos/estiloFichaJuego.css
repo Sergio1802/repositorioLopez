@@ -1,0 +1,185 @@
+
+.imagenFondo {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    z-index: -2;
+    background-repeat: repeat;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.bg-white {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-size: 18px;
+}
+
+.navbar-brand img {
+    border-radius: 50%;
+}
+
+.navbar-nav .nav-item .nav-link:hover,
+.navbar-brand:hover {
+    color: #ffffff;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.boton-inicio-sesion {
+    color: white;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.boton-inicio-sesion:hover {
+    color: white;
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.boton-buscar {
+    color: white;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.boton-buscar:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.navbar-toggler {
+    background-color: white;
+    border-radius: 20%;
+}
+
+.imagen-juego {
+    height: 450px;
+    object-fit: cover;
+    width: 346.66px;
+}
+
+.nota-media {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.verde {
+    background-color: green !important;
+}
+
+.amarillo {
+    background-color: yellow !important;
+}
+
+.rojo {
+    background-color: red !important;
+}
+
+.plataforma {
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.pc {
+    background-color: #4b0052;
+    color: white;
+}
+
+.playstation {
+    background-color: #0d3dea;
+    color: white;
+}
+
+.xbox {
+    background-color: #107c10;
+    color: white;
+}
+
+.nintendo {
+    background-color: #ec0606;
+    color: white;
+}
+
+.genero {
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.acción {
+    background-color: #ff5733;
+    color: white;
+}
+
+.aventura {
+    background-color: #8b4513;
+    color: white;
+}
+
+.rol {
+    background-color: #800080;
+    color: white;
+}
+
+.estrategia {
+    background-color: #228b22;
+    color: white;
+}
+
+.deporte {
+    background-color: #008080;
+    color: white;
+}
+
+.carreras {
+    background-color: #ff69b4;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .genero, .plataforma {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}
+
+#no-comentarios {
+    color: #777;
+    font-style: italic;
+}
+
+.comment-card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-card .card-body {
+    padding: 15px;
+}
+
+.comment-card .card-title {
+    font-weight: bold;
+}
+
+.comment-card .text-muted {
+    font-size: 12px;
+    color: #999;
+}
+
+

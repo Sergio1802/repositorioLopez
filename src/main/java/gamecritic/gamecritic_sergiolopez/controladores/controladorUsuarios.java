@@ -1,18 +1,19 @@
 package gamecritic.gamecritic_sergiolopez.controladores;
 
 import gamecritic.gamecritic_sergiolopez.servicios.JuegoServicio;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import gamecritic.gamecritic_sergiolopez.entidades.*;
 import gamecritic.gamecritic_sergiolopez.repositorios.*;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,6 +39,10 @@ public class controladorUsuarios {
 
     @Autowired
     private PlataformaRepository plataformaRepository;
+    @Autowired
+    private ComentarioRepository comentarioRepository;
+    @Autowired
+    private ListaRepository listaRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -48,12 +53,18 @@ public class controladorUsuarios {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public static String rolUsuario;
+
     @GetMapping("/")
     public String irPaginaInicio(Model modelo) {
         List<Juego> mejoresJuegos = juegoServicio.obtenerMejoresJuegos(6);
+        int idGOW = juegoRepository.findByTitulo("God of War Ragnarok").getId();
+        modelo.addAttribute("idGOW", idGOW);
         modelo.addAttribute("mejoresJuegos", mejoresJuegos);
         return "index";
-    }@GetMapping("/irSobreMi")
+    }
+
+    @GetMapping("/irSobreMi")
     public String irPaginaSobreMi(Model modelo) {
         return "sobreMi";
     }
@@ -123,12 +134,18 @@ public class controladorUsuarios {
     @PostMapping("/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
-                        Model model, HttpSession session) {
+                        Model model, HttpSession session, HttpServletResponse response) {
 
         Usuario usuario = usuarioRepository.findByEmail(email);
 
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
             session.setAttribute("usuarioLogueado", usuario);
+            session.setAttribute("userId", usuario.getId());
+
+            Cookie cookie = new Cookie("usuarioId", String.valueOf(usuario.getId()));
+            cookie.setMaxAge(60 * 60 * 24);
+            cookie.setPath("/");
+            response.addCookie(cookie);
 
             return irPaginaInicio(model);
         } else {
@@ -136,4 +153,34 @@ public class controladorUsuarios {
             return irPaginaInicio(model);
         }
     }
+
+    @GetMapping("/irPerfil/{id}")
+    public String verPerfilUsuario(@PathVariable("id") Integer id, Model modelo) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+            List<Comentario> comentarios = comentarioRepository.findByUsuarioOrderByFechaCreacionDesc(usuario);
+            List<Votacion> votaciones = votacionRepository.findByUsuarioOrderByFechaCreacionDesc(usuario);
+
+            List<Lista> listas = listaRepository.findByUsuario(usuario);
+
+            int totalComentarios = comentarios.size();
+            int totalVotaciones = votaciones.size();
+            int totalListas = listas.size();
+
+            modelo.addAttribute("usuario", usuario);
+            modelo.addAttribute("comentarios", comentarios);
+            modelo.addAttribute("votaciones", votaciones);
+            modelo.addAttribute("listas", listas);
+            modelo.addAttribute("totalComentarios", totalComentarios);
+            modelo.addAttribute("totalVotaciones", totalVotaciones);
+            modelo.addAttribute("totalListas", totalListas);
+
+
+        }
+        return "perfilUsuario";
+    }
+
+
 }

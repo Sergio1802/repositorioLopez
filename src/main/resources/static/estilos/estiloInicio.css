@@ -117,11 +117,12 @@ h2 {
 
 .card:hover .card-body {
     opacity: 1;
+    cursor: pointer;
 }
 
 @media (min-height: 960px) {
     .container {
-        max-width: 1030px;
+        max-width: 975px;
     }
 
     .row .col-xl-2 {

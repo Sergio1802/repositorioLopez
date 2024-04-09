@@ -2,11 +2,10 @@ package gamecritic.gamecritic_sergiolopez.servicios;
 
 import gamecritic.gamecritic_sergiolopez.entidades.*;
 import gamecritic.gamecritic_sergiolopez.repositorios.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public class JuegoServicio {
             double sumaPuntajes = 0;
 
             for (Votacion votacion : votaciones) {
-                sumaPuntajes += votacion.getPuntaje();
+                sumaPuntajes += votacion.getNota();
             }
 
             double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
@@ -49,7 +48,7 @@ public class JuegoServicio {
             double sumaPuntajes = 0;
 
             for (Votacion votacion : votaciones) {
-                sumaPuntajes += votacion.getPuntaje();
+                sumaPuntajes += votacion.getNota();
             }
 
             double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
@@ -116,7 +115,59 @@ public class JuegoServicio {
         return juegosFiltrados;
     }
 
+    @Transactional
+    public Juego votar(Integer juegoId, int nota, Usuario usuario) {
+        Juego juego = juegoRepository.findById(juegoId).orElse(null);
 
+        if (juego != null) {
+            Votacion votacionAnterior = votacionRepository.findByUsuarioAndJuego(usuario, juego);
+
+            if (votacionAnterior != null) {
+                votacionRepository.delete(votacionAnterior);
+            }
+
+            Votacion nuevaVotacion = new Votacion();
+            nuevaVotacion.setJuego(juego);
+            nuevaVotacion.setNota(nota);
+            nuevaVotacion.setUsuario(usuario);
+            nuevaVotacion.setFechaCreacion(new Date());
+
+            votacionRepository.save(nuevaVotacion);
+            juego.setNotaMedia(nuevaNotaMedia(juego));
+            juego = juegoRepository.save(juego);
+        }
+        return juego;
+    }
+
+    @Transactional
+    public Juego borrarVoto(Integer juegoId, Usuario usuario) {
+        Juego juego = juegoRepository.findById(juegoId).orElse(null);
+
+        if (juego != null) {
+            Votacion votacion = votacionRepository.findByUsuarioAndJuego(usuario, juego);
+
+            if (votacion != null) {
+                votacionRepository.delete(votacion);
+                juego.setNotaMedia(nuevaNotaMedia(juego));
+                juego = juegoRepository.save(juego);
+            }
+        }
+        return juego;
+    }
+
+
+    private double nuevaNotaMedia(Juego juego) {
+        List<Votacion> votaciones = votacionRepository.findByJuego(juego);
+        double sumaPuntajes = 0;
+
+        for (Votacion votacion : votaciones) {
+            sumaPuntajes += votacion.getNota();
+        }
+
+        double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
+
+        return notaMedia;
+    }
 
 
 }

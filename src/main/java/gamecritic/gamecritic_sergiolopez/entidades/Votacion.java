@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Votacion")
 @Data
@@ -26,12 +28,15 @@ public class Votacion {
     @JoinColumn(name = "juego_id", referencedColumnName = "id")
     private Juego juego;
 
-    private int puntaje;
+    private int nota;
 
-    public Votacion(Usuario usuario, Juego juego, int puntaje) {
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    public Votacion(Usuario usuario, Juego juego, int nota) {
         this.usuario = usuario;
         this.juego = juego;
-        this.puntaje = puntaje;
+        this.nota = nota;
+        this.fechaCreacion = new Date();
     }
 }
 

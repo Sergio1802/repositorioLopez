@@ -220,7 +220,6 @@ public class CrearDatos implements CommandLineRunner {
         Set<Genero> generosJuego8 = new HashSet<>();
         generosJuego8.add(accion);
         generosJuego8.add(aventura);
-        generosJuego8.add(estrategia);
         Set<Plataforma> plataformasJuego8 = new HashSet<>();
         plataformasJuego8.add(xbox);
         plataformasJuego8.add(playStation);
@@ -361,6 +360,61 @@ public class CrearDatos implements CommandLineRunner {
         if (juegoRepository.findByTitulo(juego15.getTitulo()) == null) {
             juegoRepository.save(juego15);
         }
+        // Hades
+        SimpleDateFormat formatterHades = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaLanzamientoHades = null;
+        try {
+            fechaLanzamientoHades = formatterHades.parse("17-09-2020");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Set<Genero> generosHades = new HashSet<>();
+        generosHades.add(accion);
+        generosHades.add(aventura);
+        Set<Plataforma> plataformasHades = new HashSet<>();
+        plataformasHades.add(pc);
+        plataformasHades.add(playStation);
+        plataformasHades.add(xbox);
+        Juego juego16 = new Juego("Hades", "Explora el inframundo y desafía a los dioses del Olimpo en este juego de acción roguelike lleno de acción y mitología griega.", "hades.jpg", fechaLanzamientoHades, generosHades, plataformasHades);
+        if (juegoRepository.findByTitulo(juego16.getTitulo()) == null) {
+            juegoRepository.save(juego16);
+        }
+
+// Baldur's Gate 3
+        SimpleDateFormat formatterBaldursGate3 = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaLanzamientoBaldursGate3 = null;
+        try {
+            fechaLanzamientoBaldursGate3 = formatterBaldursGate3.parse("03-08-2023");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Set<Genero> generosBaldursGate3 = new HashSet<>();
+        generosBaldursGate3.add(rol);
+        generosBaldursGate3.add(accion);
+        Set<Plataforma> plataformasBaldursGate3 = new HashSet<>();
+        plataformasBaldursGate3.add(pc);
+        Juego juego17 = new Juego("Baldur's Gate 3", "Sumérgete en una épica aventura de rol basada en Dungeons & Dragons, llena de magia, combates estratégicos y decisiones que cambiarán el destino del mundo.", "bg3.jpg", fechaLanzamientoBaldursGate3, generosBaldursGate3, plataformasBaldursGate3);
+        if (juegoRepository.findByTitulo(juego17.getTitulo()) == null) {
+            juegoRepository.save(juego17);
+        }
+
+// Crusader Kings 3
+        SimpleDateFormat formatterCrusaderKings3 = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaLanzamientoCrusaderKings3 = null;
+        try {
+            fechaLanzamientoCrusaderKings3 = formatterCrusaderKings3.parse("01-09-2020");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Set<Genero> generosCrusaderKings3 = new HashSet<>();
+        generosCrusaderKings3.add(estrategia);
+        Set<Plataforma> plataformasCrusaderKings3 = new HashSet<>();
+        plataformasCrusaderKings3.add(pc);
+        Juego juego18 = new Juego("Crusader Kings 3", "Dirige tu dinastía y forja tu propio camino hacia el poder en este juego de estrategia de gran alcance, donde cada decisión cuenta y puede cambiar el curso de la historia.", "ck3.jpg", fechaLanzamientoCrusaderKings3, generosCrusaderKings3, plataformasCrusaderKings3);
+        if (juegoRepository.findByTitulo(juego18.getTitulo()) == null) {
+            juegoRepository.save(juego18);
+        }
+
 
         SimpleDateFormat formatter11 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaNacimiento1 = null;
@@ -370,8 +424,8 @@ public class CrearDatos implements CommandLineRunner {
             e.printStackTrace();
         }
         Usuario usuario1 = new Usuario("usuario1", "usuario1@example.com",
-                passwordEncoder.encode("1234"), fechaNacimiento1,
-                "perfil1.jpg", "USER");
+                passwordEncoder.encode("12345678"), fechaNacimiento1,
+                null, "USER");
 
         if (usuarioRepository.findByNombreUsuario(usuario1.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario1);
@@ -386,8 +440,8 @@ public class CrearDatos implements CommandLineRunner {
             e.printStackTrace();
         }
         Usuario usuario2 = new Usuario("usuario2", "usuario2@example.com",
-                passwordEncoder.encode("1234"), fechaNacimiento2,
-                "perfil2.jpg", "USER");
+                passwordEncoder.encode("12345678"), fechaNacimiento2,
+                null, "USER");
 
         if (usuarioRepository.findByNombreUsuario(usuario2.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario2);
@@ -402,8 +456,8 @@ public class CrearDatos implements CommandLineRunner {
             e.printStackTrace();
         }
         Usuario usuario3 = new Usuario("admin", "admin@gmail.com",
-                passwordEncoder.encode("admin"), fechaNacimiento3,
-                "perfil3.jpg", "ADMIN");
+                passwordEncoder.encode("admin123"), fechaNacimiento3,
+                null, "ADMIN");
 
         if (usuarioRepository.findByNombreUsuario(usuario3.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario3);
@@ -418,8 +472,8 @@ public class CrearDatos implements CommandLineRunner {
             e.printStackTrace();
         }
         Usuario usuario4 = new Usuario("usuario4", "usuario4@example.com",
-                passwordEncoder.encode("admin"), fechaNacimiento4,
-                "perfil4.jpg", "USER");
+                passwordEncoder.encode("12345678"), fechaNacimiento4,
+                null, "USER");
 
         if (usuarioRepository.findByNombreUsuario(usuario4.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario4);
@@ -444,6 +498,9 @@ public class CrearDatos implements CommandLineRunner {
             juegos.add(juego13);
             juegos.add(juego14);
             juegos.add(juego15);
+            juegos.add(juego16);
+            juegos.add(juego17);
+            juegos.add(juego18);
 
             for (Juego juego : juegos) {
 

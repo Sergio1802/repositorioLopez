@@ -46,14 +46,14 @@
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">
-                <a href="#" class="btn btn-primary">
+                <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
                 </a>
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
-                <a class="btn btn-primary boton-inicio-sesion" id="boton-iniciar-sesion">
+                <a  class="btn btn-primary boton-inicio-sesion" id="boton-iniciar-sesion">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 20px;" class="mr-1">
                     Iniciar Sesión
                 </a>
@@ -67,14 +67,14 @@
     <h2 class="titulo">God of War: Ragnarök</h2>
     <p class="descripcion">God of War Ragnarök es un videojuego de acción y aventuras en tercera persona desarrollado
         por Santa Monica Studio y publicado por Sony Interactive Entertainment en 2022.</p>
-    <a href="#" class="btn btn-primary">Ver Ficha</a>
+    <a th:href="@{'/juegos/irFichaJuego/' + ${idGOW}}" class="btn btn-primary">Ver Ficha</a>
 </div>
 
 <div class="container mt-5">
     <h2 class="text-left">Más populares</h2>
     <div class="row justify-content-center">
         <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6 mt-3" th:each="juego : ${mejoresJuegos}">
-            <div class="card mb-4">
+            <div class="card mb-4" th:onclick="'irAFichaJuego(' + ${juego.id} + ')'">
                 <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" class="card-img-top" alt="Juego"
                      th:alt="${juego.titulo}" th:attr="data-src=@{/portadaJuegos/{foto}(foto=${juego.foto})}">
                 <div class="card-body">
@@ -155,6 +155,11 @@
             mensajeElement.style.display = 'none';
         }
     }
+
+    function irAFichaJuego(id) {
+        window.location.href = '/juegos/irFichaJuego/' + id;
+    }
+
 </script>
 
 </body>

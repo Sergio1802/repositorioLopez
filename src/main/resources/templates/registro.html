@@ -53,9 +53,11 @@
                 <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search">
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
-            <div th:if="${usuarioLogueado}">
-                <a href="#" class="boton-usuario"><img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon"
-                                                       style="width: 30px;"></a>
+            <div th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
+                    <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
+                    <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
+                </a>
             </div>
             <div th:unless="${usuarioLogueado}">
                 <a class="btn btn-primary boton-inicio-sesion"> <img
@@ -88,7 +90,8 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="password" minlength="8" required>
+                            <input type="password" class="form-control" id="password" name="password" minlength="8"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label for="foto">Foto (opcional)</label>

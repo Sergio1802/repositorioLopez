@@ -17,10 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class ConfiguracionSeguridad {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -28,15 +26,29 @@ public class ConfiguracionSeguridad {
             authorize.requestMatchers("/").permitAll();
             authorize.requestMatchers("/irSobreMi").permitAll();
             authorize.requestMatchers("/irRegistro").permitAll();
+            authorize.requestMatchers("/irPerfil/**").permitAll();
             authorize.requestMatchers("/juegos/irlistaJuegos").permitAll();
             authorize.requestMatchers("/juegos/filtrar").permitAll();
-            authorize.requestMatchers("/juegos/irFichaJuego").permitAll();
+            authorize.requestMatchers("/juegos/votar").permitAll();
+            authorize.requestMatchers("/juegos/comentar").permitAll();
+            authorize.requestMatchers("/juegos/irFichaJuego/**").permitAll();
             authorize.requestMatchers("/registro").permitAll();
             authorize.requestMatchers("/login").permitAll();
             authorize.requestMatchers("/imagenes/**").permitAll();
             authorize.requestMatchers("/estilos/**").permitAll();
             authorize.requestMatchers("/portadaJuegos/**").permitAll();
+            authorize.requestMatchers("/fotoUsuarios/**").permitAll();
             authorize.anyRequest().authenticated();
         }).build();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

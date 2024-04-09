@@ -92,10 +92,8 @@
 }
 
 .bg-white {
-    background-color: white;
     padding: 20px;
     border-radius: 10px;
-
 }
 
 .plataformas {
@@ -138,4 +136,47 @@ hr {
 
 .card-text.fecha {
     font-size: 0.8rem;
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    .card-text {
+        font-size: 0.7rem;
+    }
+
+    .card-text.fecha {
+        font-size: 0.65rem;
+    }
+
+    .plataforma {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .card {
+        width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .col-lg-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .eleccion-checkbox label {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .eleccion-checkbox label:last-child {
+        margin-right: 0;
+    }
 }

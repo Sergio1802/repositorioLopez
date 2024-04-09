@@ -1,9 +1,24 @@
 package gamecritic.gamecritic_sergiolopez.entidades;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
+@Component
+@Scope("prototype")
 @Entity
-@Table(name = "comentario")
+@Table(name = "Comentario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Comentario {
 
     @Id
@@ -19,7 +34,12 @@ public class Comentario {
     private Juego juego;
 
     @Column(nullable = false)
+    @Size(max = 550)
     private String contenido;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_creacion", nullable = false)
+    private Date fechaCreacion;
 
 }
 
