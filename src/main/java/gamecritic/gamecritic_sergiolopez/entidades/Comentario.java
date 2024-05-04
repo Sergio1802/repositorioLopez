@@ -41,5 +41,12 @@ public class Comentario {
     @Column(name = "fecha_creacion", nullable = false)
     private Date fechaCreacion;
 
+
+    public Comentario(Usuario usuario, Juego juego, String contenido, Date fechaCreacion) {
+        this.usuario = usuario;
+        this.juego = juego;
+        this.contenido = contenido;
+        this.fechaCreacion = fechaCreacion;
+    }
 }
 

@@ -31,6 +31,7 @@ public class JuegoServicio {
             }
 
             double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
+            notaMedia = Math.round(notaMedia * 10) / 10.0;
             juego.setNotaMedia(notaMedia);
             juegoRepository.save(juego);
         }
@@ -52,6 +53,7 @@ public class JuegoServicio {
             }
 
             double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
+            notaMedia = Math.round(notaMedia * 10) / 10.0;
             juego.setNotaMedia(notaMedia);
             juegoRepository.save(juego);
         }
@@ -165,6 +167,7 @@ public class JuegoServicio {
         }
 
         double notaMedia = votaciones.isEmpty() ? 0 : sumaPuntajes / votaciones.size();
+        notaMedia = Math.round(notaMedia * 10) / 10.0;
 
         return notaMedia;
     }

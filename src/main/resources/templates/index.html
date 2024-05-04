@@ -35,7 +35,7 @@
                     <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mis Listas</a>
+                    <a class="nav-link" id="misListas" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
@@ -50,6 +50,8 @@
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
                 </a>
+                <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
@@ -159,6 +161,15 @@
     function irAFichaJuego(id) {
         window.location.href = '/juegos/irFichaJuego/' + id;
     }
+    $('#misListas').click(function () {
+        var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
+        if (usuarioLogueado) {
+            window.location.href = '/verMisListas';
+        } else {
+            $('#modalInicioSesion').modal('show');
+        }
+    });
+
 
 </script>
 

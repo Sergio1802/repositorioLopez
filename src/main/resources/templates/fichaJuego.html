@@ -30,7 +30,7 @@
                     <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mis Listas</a>
+                    <a class="nav-link" id="misListas" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
@@ -44,7 +44,8 @@
                 <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
-                </a>
+                </a> <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
@@ -59,7 +60,7 @@
 </nav>
 <div class="container bg-white">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 d-flex justify-content-center">
             <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" class="img-fluid mb-4 imagen-juego"
                  alt="Logo del Juego">
         </div>
@@ -86,7 +87,7 @@
 
             <p class="mb-4"><strong>Nota Media:</strong> <span id="notaMedia" class="nota-media"
                                                                th:classappend="${juego.notaMedia >= 7 ? 'verde' : (juego.notaMedia >= 5 ? 'amarillo' : 'rojo')}">
-            [[${juego.notaMedia}]]
+        [[${mediaVotaciones}]]
         </span>
             </p>
 
@@ -105,20 +106,20 @@
                 <button type="button" id="btnVotar" class="btn btn-primary mr-2">Votar</button>
                 <button type="button" id="btnEliminarVoto" class="btn btn-danger">Eliminar Voto</button>
             </form>
+
         </div>
 
 
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h2>Comentarios</h2>
             <div th:if="${session.usuarioLogueado != null}">
                 <div th:unless="${comentarioUsuario != null}" id="comentario-form">
                     <form th:action="@{/juegos/comentar}" method="post">
-                        <input type="hidden" name="juegoId" th:value="${juego.id}" />
-                        <label for="comentario">Crea un comentario:</label>
+                        <input type="hidden" name="juegoId" th:value="${juego.id}"/>
+                        <label for="comentario">Crea un comentario de este juego:</label>
                         <textarea class="form-control comentario-textarea mb-2" id="comentario" name="comentario"
-                                  rows="5" required maxlength="550"></textarea>
+                                  rows="4" required maxlength="550"></textarea>
                         <button type="submit" class="btn btn-primary">Enviar Comentario</button>
                     </form>
                 </div>
@@ -126,30 +127,23 @@
         </div>
     </div>
 
-    <div class="row mt-4" th:if="${#lists.isEmpty(listaComentarios)}">
+    <div class="row" th:if="${#lists.isEmpty(listaComentarios)}">
         <div class="col-md-12" id="no-comentarios">
             <p>Aún no hay comentarios en este juego.</p>
         </div>
     </div>
 
-    <div class="row mt-4" th:unless="${#lists.isEmpty(listaComentarios)}">
+    <div class="row" th:unless="${#lists.isEmpty(listaComentarios)}">
         <div class="col-md-12">
             <h2>Comentarios</h2>
-            <div th:each="comentario : ${listaComentarios}" class="mb-3 comment-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${comentario.usuario.nombreUsuario}"></h5>
-                        <p class="card-text" th:text="${comentario.contenido}"></p>
-                        <p class="card-text">
-                            <small class="text-muted"
-                                   th:text="${#dates.format(comentario.fechaCreacion, 'dd-MM-yyyy HH:mm')}"></small>
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <div id="comentarios-container"></div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-md-12">
+            <ul id="pagination" class="pagination justify-content-center"></ul>
+        </div>
+    </div>
 
 </div>
 
@@ -200,21 +194,88 @@
 <script th:inline="javascript">
 
     $(document).ready(function () {
+        var listaComentarios = /*[[${listaComentarios}]]*/ [];
+        var comentariosPorPagina = 5;
+        var pagActual = 1;
+
+        function mostrarComentarios(pagina) {
+            var indiceInicio = (pagina - 1) * comentariosPorPagina;
+            var indiceFinal = indiceInicio + comentariosPorPagina;
+            var comentariosPaginados = listaComentarios.slice(indiceInicio, indiceFinal);
+
+            var comentariosContainer = $('#comentarios-container');
+            comentariosContainer.empty();
+
+            comentariosPaginados.forEach(function (comentario) {
+                var fecha = new Date(comentario.fechaCreacion);
+                var fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                var comentarioHtml = '<div class="mb-3 comment-card">' +
+                    '<div class="card" onclick="irAPerfilUsuario(' + comentario.usuario.id + ')">' +
+                    '<div class="card-body">' +
+                    '<div class="row">' +
+                    '<div class="col-md-2">' +
+                    '<img class="perfil-foto img-thumbnail rounded-circle border border-secondary" ' +
+                    'src="/fotoUsuarios/' + (comentario.usuario.fotoPerfil ? comentario.usuario.fotoPerfil : 'perfilVacio.png') + '" ' +
+                    'alt="Foto de Perfil">' +
+                    '</div>' +
+                    '<div class="col-md-10 info">' +
+                    '<h5 class="card-title">' + comentario.usuario.nombreUsuario + '</h5>' +
+                    '<p class="card-text">' + comentario.contenido + '</p>' +
+                    '<p class="card-text">' +
+                    '<small class="text-muted">' + fechaFormateada + '</small>' +
+                    '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                comentariosContainer.append(comentarioHtml);
+            });
+
+        }
+
+        function generarPaginacion() {
+            var totalPaginas = Math.ceil(listaComentarios.length / comentariosPorPagina);
+            $('#pagination').empty();
+            for (var i = 1; i <= totalPaginas; i++) {
+                var liClass = (i === pagActual) ? 'page-item active' : 'page-item';
+                var aClass = 'page-link';
+                var pagLink = '<li class="' + liClass + '"><a class="' + aClass + '" href="#" data-page="' + i + '">' + i + '</a></li>';
+                $('#pagination').append(pagLink);
+            }
+        }
+
+        mostrarComentarios(pagActual);
+        generarPaginacion();
+        $('#pagination').on('click', '.page-link', function (event) {
+            pagActual = parseInt($(this).data('page'));
+            mostrarComentarios(pagActual);
+            generarPaginacion();
+            event.preventDefault();
+        });
+
+
         $('#boton-iniciar-sesion').click(function (e) {
             e.preventDefault();
             $('#modalInicioSesion').modal('show');
         });
 
-        $('#btnEliminarVoto').click(function () {
+        $('#misListas').click(function () {
             var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
             if (usuarioLogueado) {
-                eliminarVoto();
+                window.location.href = '/verMisListas';
             } else {
                 $('#modalInicioSesion').modal('show');
             }
         });
 
-        function eliminarVoto() {
+        $('#btnEliminarVoto').click(function () {
             var juegoId = /*[[${juego.id}]]*/ [];
             var url = '/juegos/eliminarVoto?juegoId=' + juegoId;
 
@@ -222,14 +283,14 @@
                 type: 'GET',
                 url: url,
                 success: function (data) {
-                    $('#notaMedia').text(data.nuevaNotaMedia);
+                    $('#notaMedia').text(data.nuevaNotaMedia.toFixed(1));
                     $('#nota').val('');
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
-        }
+        });
 
         $('#btnVotar').click(function () {
             var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
@@ -249,7 +310,7 @@
                 type: 'GET',
                 url: url,
                 success: function (data) {
-                    $('#notaMedia').text(data.nuevaNotaMedia);
+                    $('#notaMedia').text(data.nuevaNotaMedia.toFixed(1));
                     $('#nota').val(data.nuevaNota);
                     var nuevaNotaMedia = data.nuevaNotaMedia;
                     var notaMediaElement = $('#notaMedia');
@@ -279,6 +340,9 @@
         }
     }
 
+    function irAPerfilUsuario(usuarioId) {
+        window.location.href = '/irPerfil/' + usuarioId;
+    }
 </script>
 </body>
 </html>

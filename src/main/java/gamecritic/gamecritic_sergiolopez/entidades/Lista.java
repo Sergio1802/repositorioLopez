@@ -24,6 +24,7 @@ public class Lista {
     @Id
     private Integer id;
 
+    @Column(length = 60)
     private String nombre;
 
     @ManyToOne

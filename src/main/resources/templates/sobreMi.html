@@ -32,7 +32,7 @@
                     <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mis Listas</a>
+                    <a class="nav-link" id="misListas" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Sobre Mí</a>
@@ -46,7 +46,8 @@
                 <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
-                </a>
+                </a> <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
@@ -64,7 +65,8 @@
         <section class="about">
             <h2>Sergio López - Desarrollador de software</h2>
             <p> Dominio de Java(Springboot), PHP, JavaScript
-                y bases de datos SQL, xxperiencia en el uso efectivo de git para el control de versiones y la colaboración en proyectos,
+                y bases de datos SQL, experiencia en el uso de git para el control de versiones y la colaboración en
+                proyectos,
                 familiaridad con metodologías ágiles como Scrum.
                 Con el objetivo de seguir aprendiendo y
                 mejorando. Rápida adaptabilidad a nuevas tecnologías y formas
@@ -172,6 +174,17 @@
             e.preventDefault();
             $('#modalInicioSesion').modal('show');
         });
+
+
+    });
+
+    $('#misListas').click(function () {
+        var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
+        if (usuarioLogueado) {
+            window.location.href = '/verMisListas';
+        } else {
+            $('#modalInicioSesion').modal('show');
+        }
     });
 
     function cerrarMensaje() {
@@ -196,6 +209,7 @@
             botonVolverArriba.style.display = 'none';
         }
     });
+
 
 </script>
 </body>

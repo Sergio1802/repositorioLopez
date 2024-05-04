@@ -30,7 +30,7 @@
                     <a class="nav-link" href="#">Juegos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mis Listas</a>
+                    <a class="nav-link" id="misListas" href="#">Mis Listas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
@@ -44,7 +44,8 @@
                 <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
-                </a>
+                </a> <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
@@ -259,6 +260,7 @@
             var indiceFinal = Math.min(indiceInicio + juegosPorPag, juegos.length);
             for (var i = indiceInicio; i < indiceFinal; i++) {
                 var juego = juegos[i];
+                var notaMediaFormateada = juego.notaMedia.toFixed(1);
                 var juegoHtml = '<div class="col-lg-4 col-md-6 mb-4">' +
                     '<div class="card" onclick="irAFichaJuego(' + juego.id + ')">' +
                     '<div class="row no-gutters">' +
@@ -269,7 +271,7 @@
                     '<div class="card-body">' +
                     '<h5 class="card-title">' + juego.titulo + '</h5>' +
                     '<p class="card-text fecha">' + formatearFecha(juego.fechaLanzamiento) + '</p>' +
-                    '<p class="card-text">Nota media: ' + juego.notaMedia + '</p>' +
+                    '<p class="card-text">Nota media: ' +notaMediaFormateada  + '</p>' +
                     '<ul class="plataformas">' +
                     cargarPlataformas(juego.plataformas) +
                     '</ul>' +
@@ -384,6 +386,15 @@
     function irAFichaJuego(id) {
         window.location.href = '/juegos/irFichaJuego/' + id;
     }
+    $('#misListas').click(function () {
+        var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
+        if (usuarioLogueado) {
+            window.location.href = '/verMisListas';
+        } else {
+            $('#modalInicioSesion').modal('show');
+        }
+    });
+
 </script>
 
 </body>

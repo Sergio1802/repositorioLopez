@@ -22,6 +22,9 @@ public class CrearDatos implements CommandLineRunner {
     private GeneroRepository generoRepository;
 
     @Autowired
+    private ComentarioRepository comentarioRepository;
+
+    @Autowired
     private PlataformaRepository plataformaRepository;
 
     @Autowired
@@ -423,7 +426,7 @@ public class CrearDatos implements CommandLineRunner {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Usuario usuario1 = new Usuario("usuario1", "usuario1@example.com",
+        Usuario usuario1 = new Usuario("manuel12", "usuario1@example.com",
                 passwordEncoder.encode("12345678"), fechaNacimiento1,
                 null, "USER");
 
@@ -439,7 +442,7 @@ public class CrearDatos implements CommandLineRunner {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Usuario usuario2 = new Usuario("usuario2", "usuario2@example.com",
+        Usuario usuario2 = new Usuario("marco", "usuario2@example.com",
                 passwordEncoder.encode("12345678"), fechaNacimiento2,
                 null, "USER");
 
@@ -455,7 +458,7 @@ public class CrearDatos implements CommandLineRunner {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Usuario usuario3 = new Usuario("admin", "admin@gmail.com",
+        Usuario usuario3 = new Usuario("david23", "usuario3@gmail.com",
                 passwordEncoder.encode("admin123"), fechaNacimiento3,
                 null, "ADMIN");
 
@@ -471,12 +474,40 @@ public class CrearDatos implements CommandLineRunner {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Usuario usuario4 = new Usuario("usuario4", "usuario4@example.com",
+        Usuario usuario4 = new Usuario("fer", "usuario4@example.com",
                 passwordEncoder.encode("12345678"), fechaNacimiento4,
                 null, "USER");
 
         if (usuarioRepository.findByNombreUsuario(usuario4.getNombreUsuario()) == null) {
             usuarioRepository.save(usuario4);
+        }
+        SimpleDateFormat formatter51 = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaNacimiento5 = null;
+        try {
+            fechaNacimiento5 = formatter51.parse("04-04-1988");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Usuario usuario5 = new Usuario("mario_12", "usuario5@example.com",
+                passwordEncoder.encode("12345678"), fechaNacimiento5,
+                null, "USER");
+
+        if (usuarioRepository.findByNombreUsuario(usuario5.getNombreUsuario()) == null) {
+            usuarioRepository.save(usuario5);
+        }
+SimpleDateFormat formatter61 = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaNacimiento6 = null;
+        try {
+            fechaNacimiento6 = formatter61.parse("04-04-1988");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Usuario usuario6 = new Usuario("juan123", "usuario6@example.com",
+                passwordEncoder.encode("12345678"), fechaNacimiento6,
+                null, "USER");
+
+        if (usuarioRepository.findByNombreUsuario(usuario6.getNombreUsuario()) == null) {
+            usuarioRepository.save(usuario6);
         }
 
 
@@ -508,19 +539,38 @@ public class CrearDatos implements CommandLineRunner {
                 Votacion votacionUsuario2 = new Votacion(usuario2, juego, (int) (Math.random() * 10) + 1);
                 Votacion votacionUsuario3 = new Votacion(usuario3, juego, (int) (Math.random() * 10) + 1);
                 Votacion votacionUsuario4 = new Votacion(usuario4, juego, (int) (Math.random() * 10) + 1);
+                Votacion votacionUsuario5 = new Votacion(usuario5, juego, (int) (Math.random() * 10) + 1);
+                Votacion votacionUsuario6 = new Votacion(usuario6, juego, (int) (Math.random() * 10) + 1);
 
                 // Verificar si la votación ya existe antes de guardarla
                 if (votacionRepository.findByUsuarioAndJuego(usuario1, juego) == null) {
                     votacionRepository.save(votacionUsuario1);
+                    Comentario comentarioUsuario1 = new Comentario(usuario1, juego, "Me encanta este juego, definitivamente uno de mis favoritos.", new Date());
+                    comentarioRepository.save(comentarioUsuario1);
                 }
                 if (votacionRepository.findByUsuarioAndJuego(usuario2, juego) == null) {
                     votacionRepository.save(votacionUsuario2);
+                    Comentario comentarioUsuario2 = new Comentario(usuario2, juego, "La historia de este juego es increíble, me mantuvo enganchado desde el principio hasta el final.", new Date());
+                    comentarioRepository.save(comentarioUsuario2);
                 }
                 if (votacionRepository.findByUsuarioAndJuego(usuario3, juego) == null) {
                     votacionRepository.save(votacionUsuario3);
+                    Comentario comentarioUsuario3 = new Comentario(usuario3, juego, "Los gráficos de este juego son impresionantes, cada detalle está muy bien hecho.", new Date());
+                    comentarioRepository.save(comentarioUsuario3);
                 }
                 if (votacionRepository.findByUsuarioAndJuego(usuario4, juego) == null) {
                     votacionRepository.save(votacionUsuario4);
+                    Comentario comentarioUsuario4 = new Comentario(usuario4, juego, "Me encanta la jugabilidad de este juego, es muy fluida y divertida.", new Date());
+                    comentarioRepository.save(comentarioUsuario4);
+                }
+                if (votacionRepository.findByUsuarioAndJuego(usuario5, juego) == null) {
+                    votacionRepository.save(votacionUsuario5);
+                    Comentario comentarioUsuario5 = new Comentario(usuario5, juego, "Este juego es una obra maestra, cada aspecto está cuidadosamente diseñado.", new Date());
+                    comentarioRepository.save(comentarioUsuario5);
+                } if (votacionRepository.findByUsuarioAndJuego(usuario6, juego) == null) {
+                    votacionRepository.save(votacionUsuario6);
+                    Comentario comentarioUsuario6 = new Comentario(usuario6, juego, "Este juego me ha divertido mucho.", new Date());
+                    comentarioRepository.save(comentarioUsuario6);
                 }
             }
         }

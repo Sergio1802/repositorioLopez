@@ -43,6 +43,8 @@ public class ControladorJuegos {
         if (optionalJuego.isPresent()) {
             Juego juego = optionalJuego.get();
             List<Comentario> listaComentarios = comentarioRepository.findByJuego(juego);
+            Collections.sort(listaComentarios, Comparator.comparing(Comentario::getFechaCreacion));
+
             Map<String, String> iconosPlataformas = new HashMap<>();
             iconosPlataformas.put("PC", "fas fa-desktop");
             iconosPlataformas.put("PlayStation", "fab fa-playstation");
@@ -56,6 +58,10 @@ public class ControladorJuegos {
             iconosGeneros.put("Estrategia", "fas fa-chess");
             iconosGeneros.put("Deporte", "fas fa-futbol");
             iconosGeneros.put("Carreras", "fas fa-car");
+
+            Double mediaVotaciones = juego.getNotaMedia();
+            String mediaFormateada = String.format("%.1f", mediaVotaciones);
+            modelo.addAttribute("mediaVotaciones", mediaFormateada);
             modelo.addAttribute("iconosGeneros", iconosGeneros);
             modelo.addAttribute("juego", juego);
             modelo.addAttribute("listaComentarios", listaComentarios);
@@ -84,6 +90,7 @@ public class ControladorJuegos {
         return ResponseEntity.ok().body(response);
 
     }
+
 
     @GetMapping("/votar")
     @ResponseBody
@@ -130,12 +137,11 @@ public class ControladorJuegos {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuarioLogueado == null) {
-            return "redirect:/login"; // Redirige al usuario a la página de inicio de sesión si no ha iniciado sesión
+            return "redirect:/login";
         }
 
         if (contenido == null || contenido.isEmpty()) {
-            // Aquí podrías mostrar un mensaje de error en la página de la ficha del juego
-            return "redirect:/juegos/irFichaJuego/" + juegoId; // Redirige de vuelta a la ficha del juego
+            return "redirect:/juegos/irFichaJuego/" + juegoId;
         }
 
         Optional<Juego> optionalJuego = juegoRepository.findById(juegoId);
@@ -151,13 +157,35 @@ public class ControladorJuegos {
 
             comentarioRepository.save(comentario);
 
-            // Redirige de vuelta a la ficha del juego después de comentar
             return "redirect:/juegos/irFichaJuego/" + juegoId;
         } else {
-            // Si el juego no existe, redirige a una página de error o a la página principal
-            return "redirect:/"; // Redirige a la página principal en caso de que el juego no exista
+            return "redirect:/";
         }
     }
+
+    @GetMapping("/borrarComentario/{id}")
+    public String borrarComentario(@PathVariable("id") Integer comentarioId, HttpSession session) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Comentario> optionalComentario = comentarioRepository.findById(comentarioId);
+
+        if (optionalComentario.isPresent()) {
+            Comentario comentario = optionalComentario.get();
+
+            if (comentario.getUsuario().equals(usuarioLogueado)) {
+                comentarioRepository.delete(comentario);
+            } else { }
+
+            return "redirect:/irPerfil/" + comentario.getUsuario().getId();
+        } else {
+            return "redirect:/";
+        }
+    }
+
 
 }
 

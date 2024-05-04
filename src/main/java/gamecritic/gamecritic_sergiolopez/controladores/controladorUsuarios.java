@@ -182,5 +182,84 @@ public class controladorUsuarios {
         return "perfilUsuario";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session, HttpServletResponse response) {
+        session.invalidate();
+
+        Cookie cookie = new Cookie("usuarioId", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/verMisListas")
+    public String verMisListas(Model modelo, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if(usuario != null) {
+            List<Lista> listas = listaRepository.findByUsuario(usuario);
+            modelo.addAttribute("listas", listas);
+            return "misListas";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/crearLista")
+    public String crearLista(@RequestParam("nombreLista") String nombreLista, HttpSession session, Model modelo) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario != null) {
+            Lista nuevaLista = new Lista();
+            nuevaLista.setNombre(nombreLista);
+            nuevaLista.setUsuario(usuario);
+
+            listaRepository.save(nuevaLista);
+
+            return "redirect:/verMisListas";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping("/borrarLista/{id}")
+    public String borrarLista(@PathVariable("id") Integer id, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario != null) {
+            Optional<Lista> optionalLista = listaRepository.findById(id);
+            if (optionalLista.isPresent()) {
+                Lista lista = optionalLista.get();
+                if (lista.getUsuario().getId().equals(usuario.getId())) {
+                    listaRepository.delete(lista);
+                }
+            }
+        }
+
+        return "redirect:/verMisListas";
+    }
+
+    @GetMapping("/verLista/{id}")
+    public String verLista(@PathVariable("id") Integer id, Model modelo, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario != null) {
+            Optional<Lista> optionalLista = listaRepository.findById(id);
+            if (optionalLista.isPresent()) {
+                Lista lista = optionalLista.get();
+                if (lista.getUsuario().getId().equals(usuario.getId())) {
+                    modelo.addAttribute("lista", lista);
+                    return "verLista"; // Reemplaza "verLista" con el nombre de la vista para mostrar la lista
+                }
+            }
+        }
+
+        return "redirect:/verMisListas";
+    }
+
+
+
 
 }
