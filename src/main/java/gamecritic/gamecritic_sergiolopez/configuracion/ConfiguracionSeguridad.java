@@ -38,6 +38,8 @@ public class ConfiguracionSeguridad {
             authorize.requestMatchers("/juegos/comentar").permitAll();
             authorize.requestMatchers("/juegos/irFichaJuego/**").permitAll();
             authorize.requestMatchers("/juegos/borrarComentario/**").permitAll();
+            authorize.requestMatchers("/juegos/agregarJuego/**").permitAll();
+            authorize.requestMatchers("/juegos/buscarJuegos").permitAll();
             authorize.requestMatchers("/registro").permitAll();
             authorize.requestMatchers("/login").permitAll();
             authorize.requestMatchers("/logout").permitAll();

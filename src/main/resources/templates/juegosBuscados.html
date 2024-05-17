@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - GameCritic</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" th:href="@{/estilos/estiloInicio.css}"/>
+    <title>Juegos - GameCritic</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/estilos/estiloJuegosBuscados.css}"/>
     <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
 
 </head>
 <body>
 <img class="imagenFondo" th:src="@{/imagenes/fondoImagen.jpg}">
-<video autoplay muted loop id="background-video" class="position-absolute">
-    <source th:src="@{/imagenes/videoFondo.mp4}" type="video/mp4">
-</video>
-<div id="video-overlay"></div>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
         <a class="navbar-brand">
@@ -29,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+                    <a class="nav-link" th:href="@{/}">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
@@ -49,13 +44,12 @@
                 <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
                     <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
-                </a>
-                <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+                </a> <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
 
             </div>
 
             <div th:if="${session.usuarioLogueado == null}">
-                <a  class="btn btn-primary boton-inicio-sesion" id="boton-iniciar-sesion">
+                <a class="btn btn-primary boton-inicio-sesion" id="boton-iniciar-sesion">
                     <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 20px;" class="mr-1">
                     Iniciar Sesión
                 </a>
@@ -64,29 +58,51 @@
         </div>
     </div>
 </nav>
+<div class="container mt-4 bg-white">
+    <div class="row">
 
-<div class="container mt-5 text-left texto-legible">
-    <h2 class="titulo">God of War: Ragnarök</h2>
-    <p class="descripcion">God of War Ragnarök es un videojuego de acción y aventuras en tercera persona desarrollado
-        por Santa Monica Studio y publicado por Sony Interactive Entertainment en 2022.</p>
-    <a th:href="@{'/juegos/irFichaJuego/' + ${idGOW}}" class="btn btn-primary">Ver Ficha</a>
-</div>
-
-<div class="container mt-5">
-    <h2 class="text-left">Más populares</h2>
-    <div class="row justify-content-center">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6 mt-3" th:each="juego : ${mejoresJuegos}">
-            <div class="card mb-4" th:onclick="'irAFichaJuego(' + ${juego.id} + ')'">
-                <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}" class="card-img-top" alt="Juego"
-                     th:alt="${juego.titulo}" th:attr="data-src=@{/portadaJuegos/{foto}(foto=${juego.foto})}">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${juego.titulo}">Título del Juego</h5>
-                    <p class="card-text" th:text="'Puntuación media: ' + ${juego.notaMedia}">Puntuación Media</p>
+        <div class="col">
+            <div class="tab-pane fade show active" id="votaciones-contenido">
+                <div class="row">
+                    <div th:if="${#lists.isEmpty(juegosEncontrados)}">
+                        <div class="col-lg-12 mb-4">
+                            <div class="alert alert-info" role="alert">
+                                No se ha encontrado ningún juego.
+                            </div>
+                        </div>
+                    </div>
+                    <div th:each="juego : ${juegosEncontrados}" class="col-lg-12 mb-4">
+                        <div class="card" th:onclick="'irAFichaJuego(\'' + ${juego.id} + '\')'">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}"
+                                             class="img-fluid imagen-juego" alt="Portada del juego">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <h5 class="card-title" th:text="${juego.titulo}"></h5>
+                                        <p class="card-text"><strong>Fecha de lanzamiento:</strong> <span
+                                                th:text="${#dates.format(juego.fechaLanzamiento, 'dd-MM-yyyy')}"></span>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Nota media:</strong>
+                                            <span th:text="${juego.notaMedia}"
+                                                  th:class="'nota-media ' + (${juego.notaMedia >= 7 ? 'verde' : (juego.notaMedia >= 5 ? 'amarillo' : 'rojo')})"></span>
+                                        </p>
+                                        <p class="card-text"><strong>Descripción:</strong> <span
+                                                th:text="${juego.descripcion}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<button onclick="subirTop()" id="botonVolverArriba" title="Volver arriba">↑</button>
 <div class="modal fade" id="modalInicioSesion" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -116,12 +132,6 @@
         </div>
     </div>
 </div>
-<div th:if="${mensajeRegistro != null}" class="mensaje">
-    <span th:text="${mensajeRegistro}"></span>
-    <div class="cerrar-mensaje" onclick="cerrarMensaje2()">
-        <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
-    </div>
-</div>
 <div th:if="${mensajeError != null}" class="mensaje-error">
     <div class="icono-error">
         <img th:src="@{/imagenes/iconoError.png}" alt="Icono de Error">
@@ -133,10 +143,10 @@
         <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
     $(document).ready(function () {
         $('#boton-iniciar-sesion').click(function (e) {
             e.preventDefault();
@@ -151,16 +161,6 @@
         }
     }
 
-    function cerrarMensaje2() {
-        var mensajeElement = document.querySelector('.mensaje');
-        if (mensajeElement) {
-            mensajeElement.style.display = 'none';
-        }
-    }
-
-    function irAFichaJuego(id) {
-        window.location.href = '/juegos/irFichaJuego/' + id;
-    }
     $('#misListas').click(function () {
         var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
         if (usuarioLogueado) {
@@ -170,8 +170,25 @@
         }
     });
 
+    function irAFichaJuego(id) {
+        window.location.href = '/juegos/irFichaJuego/' + id;
+    }
 
+    function subirTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    window.addEventListener('scroll', function () {
+        var botonVolverArriba = document.getElementById('botonVolverArriba');
+        if (window.scrollY > 600) {
+            botonVolverArriba.style.display = 'block';
+        } else {
+            botonVolverArriba.style.display = 'none';
+        }
+    });
 </script>
-
 </body>
 </html>

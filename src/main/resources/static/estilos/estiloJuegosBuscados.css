@@ -64,16 +64,9 @@
     border-radius: 20%;
 }
 
-.perfil-foto {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-}
-
-.text-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.bg-white {
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .imagen-juego {
@@ -138,9 +131,4 @@
 
 #botonVolverArriba:hover {
     background-color: #0056b3;
-}
-
-.textoNegrita{
-    font-weight: bold;
-    font-size: 20px;
 }

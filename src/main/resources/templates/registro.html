@@ -49,8 +49,8 @@
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="/juegos/buscarJuegos" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search" name="query">
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">

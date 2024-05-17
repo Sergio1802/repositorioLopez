@@ -2,9 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Lista - GameCritic</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/estilos/estiloVerLista.css}"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
 </head>
 <body>
 
+<img class="imagenFondo" th:src="@{/imagenes/fondoImagen.jpg}">
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand">
+            <img th:src="@{/imagenes/logo.jpg}" alt="GameCritic Logo" style="width: 50px;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/juegos/irlistaJuegos}">Juegos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="misListas" href="#">Mis Listas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="/juegos/buscarJuegos" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search" name="query">
+                <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
+            </form>
+            <div th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{'/irPerfil/' + ${session.userId}}" class="btn btn-primary">
+                    <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 30px;">
+                    <span th:text="${session.usuarioLogueado.nombreUsuario}"></span>
+                </a> <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+
+            </div>
+
+            <div th:if="${session.usuarioLogueado == null}">
+                <a class="btn btn-primary boton-inicio-sesion" id="boton-iniciar-sesion">
+                    <img th:src="@{/imagenes/iconoUsuario.png}" alt="User Icon" style="width: 20px;" class="mr-1">
+                    Iniciar Sesión
+                </a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+<div class="container bg-white mt-5">
+    <div class="row">
+        <div class="col">
+            <h1 th:text="${lista.nombre}"></h1>
+        </div>
+        <div class="col text-right">
+            <div class="dropdown">
+                <span class="mr-2">Ordenar por:</span>
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="ordenarDropdownButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Seleccionar
+                </button>
+                <div class="dropdown-menu" aria-labelledby="ordenarDropdownButton">
+                    <a class="dropdown-item" onclick="ordenarPor('notaMedia')">Nota Media</a>
+                    <a class="dropdown-item" onclick="ordenarPor('lanzamientosRecientes')">Lanzamientos Recientes</a>
+                    <a class="dropdown-item" onclick="ordenarPor('lanzamientosAntiguos')">Lanzamientos Antiguos</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="tab-pane fade show active" id="votaciones-contenido">
+                <div class="row">
+                    <div th:each="juego : ${lista.juegos}" class="col-lg-12 mb-4">
+                        <div class="card" th:onclick="'irAFichaJuego(\'' + ${juego.id} + '\')'">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img th:src="@{/portadaJuegos/{foto}(foto=${juego.foto})}"
+                                             class="img-fluid imagen-juego" alt="Portada del juego">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <h5 class="card-title" th:text="${juego.titulo}"></h5>
+                                        <p class="card-text"><strong>Fecha de lanzamiento:</strong> <span
+                                                th:text="${#dates.format(juego.fechaLanzamiento, 'dd-MM-yyyy')}"></span>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Nota media:</strong>
+                                            <span th:text="${juego.notaMedia}"
+                                                  th:class="'nota-media ' + (${juego.notaMedia >= 7 ? 'verde' : (juego.notaMedia >= 5 ? 'amarillo' : 'rojo')})"></span>
+                                        </p>
+                                        <p class="card-text"><strong>Descripción:</strong> <span
+                                                th:text="${juego.descripcion}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    $('#misListas').click(function () {
+        var usuarioLogueado = /*[[${session.usuarioLogueado != null}]]*/ false;
+        if (usuarioLogueado) {
+            window.location.href = '/verMisListas';
+        } else {
+            $('#modalInicioSesion').modal('show');
+        }
+    });
+
+    function ordenarPor(criterio) {
+        var listaJuegos = /*[[${lista.juegos}]]*/ [];
+
+        switch (criterio) {
+            case 'notaMedia':
+                listaJuegos.sort((a, b) => b.notaMedia - a.notaMedia);
+                break;
+            case 'lanzamientosRecientes':
+                listaJuegos.sort((a, b) => new Date(b.fechaLanzamiento) - new Date(a.fechaLanzamiento));
+                break;
+            case 'lanzamientosAntiguos':
+                listaJuegos.sort((a, b) => new Date(a.fechaLanzamiento) - new Date(b.fechaLanzamiento));
+                break;
+            default:
+                listaJuegos.sort((a, b) => b.notaMedia - a.notaMedia);
+                break;
+        }
+
+        renderizarListaJuegos(listaJuegos);
+
+        var ordenarDropdownButton = document.getElementById('ordenarDropdownButton');
+        switch (criterio) {
+            case 'notaMedia':
+                ordenarDropdownButton.innerText = "Nota Media";
+                break;
+            case 'lanzamientosRecientes':
+                ordenarDropdownButton.innerText = "Lanzamientos Recientes";
+                break;
+            case 'lanzamientosAntiguos':
+                ordenarDropdownButton.innerText = "Lanzamientos Antiguos";
+                break;
+            default:
+                ordenarDropdownButton.innerText = "Seleccionar";
+                break;
+        }
+    }
+
+    function renderizarListaJuegos(listaJuegos) {
+        var votacionesContenido = document.getElementById('votaciones-contenido');
+        votacionesContenido.innerHTML = '';
+
+        listaJuegos.forEach(function (juego) {
+            var juegoHtml = `
+                <div class="col-lg-12 mb-4">
+                    <div class="card" onclick="irAFichaJuego(${juego.id})">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="/portadaJuegos/${juego.foto}" class="img-fluid imagen-juego" alt="Portada del juego">
+                                </div>
+                                <div class="col-md-10">
+                                    <h5 class="card-title">${juego.titulo}</h5>
+                                    <p class="card-text"><strong>Fecha de lanzamiento:</strong> ${formatDate(juego.fechaLanzamiento)}</p>
+                                    <p class="card-text">
+                                        <strong>Nota media:</strong>
+                                        <span class="nota-media ${getNotaMediaColor(juego.notaMedia)}">${juego.notaMedia}</span>
+                                    </p>
+                                    <p class="card-text"><strong>Descripción:</strong> ${juego.descripcion}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            votacionesContenido.innerHTML += juegoHtml;
+        });
+    }
+
+    function getNotaMediaColor(notaMedia) {
+        if (notaMedia >= 7) {
+            return 'verde';
+        } else if (notaMedia >= 5) {
+            return 'amarillo';
+        } else {
+            return 'rojo';
+        }
+    }
+
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric'});
+    }
+
+    function irAFichaJuego(id) {
+        window.location.href = '/juegos/irFichaJuego/' + id;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        ordenarPor('notaMedia');
+    });
+
+
+</script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package gamecritic.gamecritic_sergiolopez.controladores;
 import gamecritic.gamecritic_sergiolopez.entidades.*;
 import gamecritic.gamecritic_sergiolopez.repositorios.ComentarioRepository;
 import gamecritic.gamecritic_sergiolopez.repositorios.JuegoRepository;
+import gamecritic.gamecritic_sergiolopez.repositorios.ListaRepository;
 import gamecritic.gamecritic_sergiolopez.repositorios.VotacionRepository;
 import gamecritic.gamecritic_sergiolopez.servicios.JuegoServicio;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,8 @@ public class ControladorJuegos {
     private VotacionRepository votacionRepository;
     @Autowired
     private ComentarioRepository comentarioRepository;
+    @Autowired
+    private ListaRepository listaRepository;
 
     @GetMapping("/irlistaJuegos")
     public String irPaginaListaJuegos(Model modelo) {
@@ -72,10 +75,48 @@ public class ControladorJuegos {
                 Comentario comentarioUsuario = comentarioRepository.findByUsuarioAndJuego(usuarioLogueado, juego);
                 modelo.addAttribute("votacionUsuario", votacionUsuario);
                 modelo.addAttribute("comentarioUsuario", comentarioUsuario);
+
+                List<Lista> listasUsuario = listaRepository.findByUsuario(usuarioLogueado);
+                for (Lista lista : listasUsuario) {
+                    List<Juego> juegosEnLista = new ArrayList<>(lista.getJuegos());
+                    int numJuegosEnLista = juegosEnLista != null ? juegosEnLista.size() : 0;
+                }
+                modelo.addAttribute("listasUsuario", listasUsuario);
             }
         }
         return "fichaJuego";
     }
+
+    @GetMapping("/agregarJuego")
+    public String agregarJuego(@RequestParam("listaId") Integer listaId,
+                               @RequestParam("juegoId") Integer juegoId,
+                               HttpSession session) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuarioLogueado == null) {
+            return "redirect:/";
+        }
+
+        Optional<Lista> optionalLista = listaRepository.findById(listaId);
+        Optional<Juego> optionalJuego = juegoRepository.findById(juegoId);
+
+        if (!optionalLista.isPresent() || !optionalJuego.isPresent()) {
+            return "redirect:/";
+        }
+
+        Lista lista = optionalLista.get();
+        Juego juego = optionalJuego.get();
+
+        if (lista.getJuegos().contains(juego)) {
+            return "redirect:/juegos/irFichaJuego/" + juegoId;
+        }
+
+        lista.getJuegos().add(juego);
+        listaRepository.save(lista);
+
+        return "redirect:/juegos/irFichaJuego/" + juegoId;
+    }
+
 
 
     @GetMapping("/filtrar")
@@ -185,6 +226,44 @@ public class ControladorJuegos {
             return "redirect:/";
         }
     }
+
+    @GetMapping("/eliminarJuegoLista")
+    public String eliminarJuegoLista(@RequestParam("listaId") Integer listaId,
+                                     @RequestParam("juegoId") Integer juegoId, HttpSession session) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuarioLogueado == null) {
+            return "redirect:/";
+        }
+
+        Optional<Lista> optionalLista = listaRepository.findById(listaId);
+        Optional<Juego> optionalJuego = juegoRepository.findById(juegoId);
+
+        if (!optionalLista.isPresent() || !optionalJuego.isPresent()) {
+            return "redirect:/";
+        }
+
+        Lista lista = optionalLista.get();
+        Juego juego = optionalJuego.get();
+
+        if (!lista.getJuegos().contains(juego)) {
+            return "redirect:/verLista?listaId=" + listaId;
+        }
+
+        lista.getJuegos().remove(juego);
+        listaRepository.save(lista);
+
+        return "redirect:/verLista?listaId=" + listaId;
+    }
+    @GetMapping("/buscarJuegos")
+    public String buscarJuegos(@RequestParam("query") String query, Model model) {
+        List<Juego> juegosEncontrados = juegoRepository.findByTituloContainingIgnoreCase(query);
+
+        model.addAttribute("juegosEncontrados", juegosEncontrados);
+
+        return "juegosBuscados";
+    }
+
 
 
 }

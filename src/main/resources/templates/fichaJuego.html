@@ -36,8 +36,8 @@
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="/juegos/buscarJuegos" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search" name="query">
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">
@@ -106,6 +106,11 @@
                 <button type="button" id="btnVotar" class="btn btn-primary mr-2">Votar</button>
                 <button type="button" id="btnEliminarVoto" class="btn btn-danger">Eliminar Voto</button>
             </form>
+            <div th:if="${session.usuarioLogueado != null}">
+                <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#misListasModal">
+                    Añadir a mis listas
+                </button>
+            </div>
 
         </div>
 
@@ -188,11 +193,52 @@
         <img th:src="@{/imagenes/iconoCerrar.png}" alt="Cerrar">
     </div>
 </div>
+<div class="modal fade" id="misListasModal" tabindex="-1" role="dialog" aria-labelledby="misListasModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="misListasModalLabel">Mis Listas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li th:each="lista : ${listasUsuario}" th:data-lista-id="${lista.id}"
+                        class="list-group-item d-flex justify-content-between align-items-center lista-item"
+                        th:classappend="${lista.juegos.contains(juego)} ? 'disabled-row' : ''">
+                        <div class="form-check mb-3 mr-5">
+                            <input class="form-check-input" type="checkbox"
+                                   th:checked="${lista.juegos.contains(juego)} ? 'checked' : null"
+                                   th:disabled="${lista.juegos.contains(juego)} ? 'disabled' : null">
+                        </div>
+                        <span th:text="${lista.nombre}" class="flex-grow-1 mx-2 ml-5"></span>
+                        <span class="" th:text="'Total de juegos: ' + ${lista.juegos.size()}"></span>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script th:inline="javascript">
-
+    $(document).ready(function () {
+        $('.lista-item').click(function () {
+            var listaId = $(this).data('lista-id');
+            var juegoId = /*[[${juego.id}]]*/ [];
+            console.log(listaId + "sdcs" + juegoId)
+            window.location.href = '/juegos/agregarJuego?listaId=' + listaId + '&juegoId=' + juegoId;
+        });
+    });
     $(document).ready(function () {
         var listaComentarios = /*[[${listaComentarios}]]*/ [];
         var comentariosPorPagina = 5;

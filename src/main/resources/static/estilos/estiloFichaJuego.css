@@ -213,3 +213,22 @@
         margin-left: 0;
     }
 }
+
+.lista-item {
+    border: 2px solid #ced4da;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+}
+
+.lista-item:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.disabled-row {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+

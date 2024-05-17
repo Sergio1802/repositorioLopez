@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - GameCritic</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/estilos/estiloPerfil.css}"/>
     <link rel="shortcut icon" type="image/png" th:href="@{/imagenes/favicon.ico}"/>
 
@@ -38,8 +37,8 @@
                     <a class="nav-link" th:href="@{/irSobreMi}">Sobre Mí</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="/juegos/buscarJuegos" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar juegos" aria-label="Search" name="query">
                 <button class="btn btn-outline-success mr-2 my-2 my-sm-0 boton-buscar" type="submit">Buscar</button>
             </form>
             <div th:if="${session.usuarioLogueado != null}">
@@ -167,8 +166,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div th:if="${session.usuarioLogueado != null and session.usuarioLogueado.id == comentario.usuario.id}" class="col-md-2 text-right">
-                                    <a th:href="@{/juegos/borrarComentario/{id}(id=${comentario.id})}" class="btn btn-outline-danger">
+                                <div th:if="${session.usuarioLogueado != null and session.usuarioLogueado.id == comentario.usuario.id}"
+                                     class="col-md-2 text-right">
+                                    <a th:href="@{/juegos/borrarComentario/{id}(id=${comentario.id})}"
+                                       class="btn btn-outline-danger">
                                         <i class="fas fa-trash"></i> Borrar
                                     </a>
                                 </div>
@@ -180,12 +181,30 @@
         </div>
 
         <div class="tab-pane fade" id="listas-contenido">
-            <ul>
-                <li th:each="lista : ${listas}">
-                    <p th:text="'Lista de ' + ${lista.usuario.nombreUsuario} + ': ' + ${lista.nombre}"></p>
-                </li>
-            </ul>
+            <div class="row">
+                <div th:each="lista : ${listas}" class="col-md-12 mb-3">
+                    <div class="card">
+                        <a th:href="@{'/verLista/' + ${lista.id}}" class="card-link">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-md-6 col-lg-4 text-center mb-3 mb-md-0" style="color: black;">
+                                        <h5 class="card-text" style="margin: 0;">Nombre de la lista: <span
+                                                class="textoNegrita" th:text="${lista.nombre}"></span></h5>
+                                    </div>
+                                    <div class="col-md-3 col-lg-4 text-center mb-3 mb-md-0" style="color: black;">
+                                        <p class="card-text mb-0">Total de juegos: <span class="textoNegrita"
+                                                                                         th:text="${lista.juegos.size()}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     </div>
 </div>
 <button onclick="subirTop()" id="botonVolverArriba" title="Volver arriba">↑</button>
