@@ -118,7 +118,6 @@ public class ControladorJuegos {
     }
 
 
-
     @GetMapping("/filtrar")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> filtrarJuegos(@RequestParam(value = "fechaDesde") String fechaDesde,
@@ -137,11 +136,16 @@ public class ControladorJuegos {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> votar(@RequestParam("nota") int nota,
                                                      @RequestParam("juegoId") Integer juegoId, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado == null) {
+            response.put("error", "Usuario no logueado.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
 
         Juego juegoActualizado = juegoServicio.votar(juegoId, nota, usuarioLogueado);
 
-        Map<String, Object> response = new HashMap<>();
 
         if (juegoActualizado != null) {
             response.put("nuevaNota", nota);
@@ -158,9 +162,14 @@ public class ControladorJuegos {
     public ResponseEntity<?> eliminarVoto(@RequestParam("juegoId") Integer juegoId, HttpSession session) {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
-        Juego juegoActualizado = juegoServicio.borrarVoto(juegoId, usuarioLogueado);
-
         Map<String, Object> response = new HashMap<>();
+
+        if (usuarioLogueado == null) {
+            response.put("error", "Usuario no logueado.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        Juego juegoActualizado = juegoServicio.borrarVoto(juegoId, usuarioLogueado);
 
         if (juegoActualizado != null) {
             response.put("nuevaNotaMedia", juegoActualizado.getNotaMedia());
@@ -219,7 +228,8 @@ public class ControladorJuegos {
 
             if (comentario.getUsuario().equals(usuarioLogueado)) {
                 comentarioRepository.delete(comentario);
-            } else { }
+            } else {
+            }
 
             return "redirect:/irPerfil/" + comentario.getUsuario().getId();
         } else {
@@ -227,34 +237,6 @@ public class ControladorJuegos {
         }
     }
 
-    @GetMapping("/eliminarJuegoLista")
-    public String eliminarJuegoLista(@RequestParam("listaId") Integer listaId,
-                                     @RequestParam("juegoId") Integer juegoId, HttpSession session) {
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-
-        if (usuarioLogueado == null) {
-            return "redirect:/";
-        }
-
-        Optional<Lista> optionalLista = listaRepository.findById(listaId);
-        Optional<Juego> optionalJuego = juegoRepository.findById(juegoId);
-
-        if (!optionalLista.isPresent() || !optionalJuego.isPresent()) {
-            return "redirect:/";
-        }
-
-        Lista lista = optionalLista.get();
-        Juego juego = optionalJuego.get();
-
-        if (!lista.getJuegos().contains(juego)) {
-            return "redirect:/verLista?listaId=" + listaId;
-        }
-
-        lista.getJuegos().remove(juego);
-        listaRepository.save(lista);
-
-        return "redirect:/verLista?listaId=" + listaId;
-    }
     @GetMapping("/buscarJuegos")
     public String buscarJuegos(@RequestParam("query") String query, Model model) {
         List<Juego> juegosEncontrados = juegoRepository.findByTituloContainingIgnoreCase(query);
@@ -263,7 +245,6 @@ public class ControladorJuegos {
 
         return "juegosBuscados";
     }
-
 
 
 }

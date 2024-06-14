@@ -35,11 +35,6 @@ public class controladorUsuarios {
     private JuegoServicio juegoServicio;
 
     @Autowired
-    private GeneroRepository generoRepository;
-
-    @Autowired
-    private PlataformaRepository plataformaRepository;
-    @Autowired
     private ComentarioRepository comentarioRepository;
     @Autowired
     private ListaRepository listaRepository;
@@ -52,8 +47,6 @@ public class controladorUsuarios {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    public static String rolUsuario;
 
     @GetMapping("/")
     public String irPaginaInicio(Model modelo) {
@@ -251,7 +244,7 @@ public class controladorUsuarios {
                 Lista lista = optionalLista.get();
                 if (lista.getUsuario().getId().equals(usuario.getId())) {
                     modelo.addAttribute("lista", lista);
-                    return "verLista"; // Reemplaza "verLista" con el nombre de la vista para mostrar la lista
+                    return "verLista";
                 }
             }
         }

@@ -138,7 +138,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego3);
         }
 
-        // Juego 4
         SimpleDateFormat formatter4 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento4 = null;
         try {
@@ -156,7 +155,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego4);
         }
 
-        // Juego 5
         SimpleDateFormat formatter5 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento5 = null;
         try {
@@ -176,7 +174,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego5);
         }
 
-        // Juego 6
         SimpleDateFormat formatter6 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento6 = null;
         try {
@@ -212,7 +209,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego7);
         }
 
-        // Juego 8
         SimpleDateFormat formatter8 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento8 = null;
         try {
@@ -232,7 +228,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego8);
         }
 
-        // Juego 9
         SimpleDateFormat formatter9 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento9 = null;
         try {
@@ -249,7 +244,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego9);
         }
 
-        // Juego 10
         SimpleDateFormat formatter10 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamiento10 = null;
         try {
@@ -289,7 +283,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego11);
         }
 
-// Resident Evil 2 Remake
         SimpleDateFormat formatterRE2 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoRE2 = null;
         try {
@@ -308,7 +301,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego12);
         }
 
-// God of War Ragnarok
         SimpleDateFormat formatterGodOfWar = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoGodOfWar = null;
         try {
@@ -326,7 +318,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego13);
         }
 
-// Uncharted 4
         SimpleDateFormat formatterUncharted4 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoUncharted4 = null;
         try {
@@ -344,7 +335,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego14);
         }
 
-// Hollow Knight
         SimpleDateFormat formatterHollowKnight = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoHollowKnight = null;
         try {
@@ -363,7 +353,7 @@ public class CrearDatos implements CommandLineRunner {
         if (juegoRepository.findByTitulo(juego15.getTitulo()) == null) {
             juegoRepository.save(juego15);
         }
-        // Hades
+
         SimpleDateFormat formatterHades = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoHades = null;
         try {
@@ -383,7 +373,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego16);
         }
 
-// Baldur's Gate 3
         SimpleDateFormat formatterBaldursGate3 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoBaldursGate3 = null;
         try {
@@ -401,7 +390,6 @@ public class CrearDatos implements CommandLineRunner {
             juegoRepository.save(juego17);
         }
 
-// Crusader Kings 3
         SimpleDateFormat formatterCrusaderKings3 = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaLanzamientoCrusaderKings3 = null;
         try {
